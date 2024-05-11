@@ -8,9 +8,11 @@ function DashboardLayout({ children }) {
     <div className="flex h-full">
       <MenuProvider>
         <Navbar />
-        <div className="flex-auto">
+        <div className="flex-auto overflow-y-auto">
           <Header />
-          {children}
+          <div className="p-5 bg-[#f0f0f5] text-[#282f53]">
+            {children}
+          </div>
         </div>
       </MenuProvider>
     </div>

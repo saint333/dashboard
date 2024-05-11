@@ -11,7 +11,7 @@ export default function Header() {
   const [{ toggled }, dispatch] = useMenuProvider();
 const router = useRouter();
   return (
-    <div className='py-2 md:py-4 md:px-7 border-b border-gray-400 bg-white w-full'>
+    <div className='sticky top-0 py-2 md:py-4 md:px-7 border-b border-gray-400 bg-white w-full'>
       <div className='flex justify-between items-center'>
         <button
           className='text-2xl text-[#FF66C4]'

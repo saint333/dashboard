@@ -5,7 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 export default function Menu() {
   return (
-    <div className='flex items-center gap-4 flex-col md:flex-row'>
+    <div className='flex items-center gap-4 flex-row flex-wrap md:flex-nowrap'>
       <CiGlobe className='text-2xl text-[#FF66C4]' />
       <select className='border border-gray-400 px-3 py-1 rounded-md text-gray-500 outline-none'>
         <option value=''>tienda 3</option>
