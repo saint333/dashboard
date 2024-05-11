@@ -5,6 +5,7 @@ const nextConfig = {
   images:{
     loader: "imgix",
     path: "/",
+    domains: ['https://dashboard-knrd.onrender.com/'],
   }
 };
 
