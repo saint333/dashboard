@@ -1,97 +1,217 @@
 "use client";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import React from "react";
 import { useMenuProvider } from "@/context/menu/MenuContext";
-import { menuCase } from "@/context/common/MenuConstants";
 import Image from "next/image";
 import { menu } from "@/mock/menu";
 import { useRouter } from "next/navigation";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import MuiDrawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import { DrawerHeader } from "../main";
+import { drawerWidth } from "../header";
+import { Collapse, Icon, ListSubheader } from "@mui/material";
+import { ExpandMore } from "@mui/icons-material";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useState } from "react";
 
-const MenuItems = (menu, collapsed) => {
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `0px`,
+  [theme.breakpoints.up("md")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
+
+const MenuItems = ({ menu = [], collapsed }) => {
+  const [open, setOpen] = useState({});
+
+  const handleClick = (id) => {
+    setOpen({ ...open, [id]: !open[id] });
+  };
   const router = useRouter();
-  return menu.map((item, index) => {
-    return (
-      <div key={index}>
-        {item.type === "label" && (
-          <div
-            key={index + item.text}
-            className={`py-3 px-8 ${collapsed ? "hidden" : "block"}
-        `}
-          >
-            <p className='text-gray-500'>{item.text}</p>
-          </div>
-        )}
-        {item.type === "item" && (
-          <MenuItem
-            key={index + item.text}
-            icon={item.icon}
-            onClick={() => router.push(item.link)}
-          >
-            {item.text}
-          </MenuItem>
-        )}
-        {item.type === "group" && (
-          <SubMenu
-            key={index + item.text}
-            icon={item.icon}
-            label={item.text}
-            // onClick={() => dispatch({ type: menuCase.TOGGLED })}
-          >
-            {MenuItems(item.children, collapsed)}
-          </SubMenu>
-        )}
-      </div>
-    );
-  })
-}
+  return menu.map((item) => {
+    if (item.type === "item") {
+      return (
+        <List key={item.id} onClick={() => router.push(item.url)}>
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: collapsed ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: collapsed ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon color='primary'>{item.icon}</Icon>
+              </ListItemIcon>
+              <ListItemText
+                primary={item.title}
+                sx={{ opacity: collapsed ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      );
+    }
+    if (item.type === "group") {
+      return (
+        <List
+          key={item.id}
+          subheader={
+            collapsed && (
+              <ListSubheader sx={{ color: "#74829c" }}>
+                {item.title}
+              </ListSubheader>
+            )
+          }
+        >
+          <MenuItems menu={item.children} collapsed={collapsed} />
+        </List>
+      );
+    }
+    if (item.type === "collapse") {
+      return (
+        <List key={item.id}>
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: collapsed ? "initial" : "center",
+                px: 2.5,
+              }}
+              onClick={() => handleClick(item.id)}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: collapsed ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <Icon color='primary'>{item.icon}</Icon>
+              </ListItemIcon>
+              <ListItemText
+                primary={item.title}
+                sx={{ opacity: collapsed ? 1 : 0 }}
+              />
+              {collapsed ? (
+                open[item.id] ? (
+                  <KeyboardArrowRightIcon />
+                ) : (
+                  <ExpandMore />
+                )
+              ) : null}
+            </ListItemButton>
+            <Collapse
+              in={collapsed && open[item.id]}
+              timeout='auto'
+              unmountOnExit
+            >
+              <MenuItems menu={item.children} collapsed={collapsed} />
+            </Collapse>
+          </ListItem>
+        </List>
+      );
+    }
+    if (item.type === "subitem") {
+      return (
+        <List disablePadding key={item.id}>
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <ListItemButton
+              sx={{ pl: 4, minHeight: 48 }}
+              onClick={() => router.push(item.url)}
+            >
+              <ListItemIcon>
+                <Icon color='primary'>{item.icon}</Icon>
+              </ListItemIcon>
+              <ListItemText
+                primary={item.title}
+                sx={{ opacity: collapsed ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      );
+    }
+  });
+};
 
 function Navbar() {
   const [{ collapsed, toggled }, dispatch] = useMenuProvider();
+
   return (
-    <Sidebar
-      collapsed={collapsed}
-      toggled={!toggled}
-      transitionDuration={1000}
-      breakPoint='md'
-      backgroundColor='#fefefe'
-      onBreakPoint={(broken) => {
-        if (broken) {
-          dispatch({ type: menuCase.ALL, toggled: true, collapsed: false });
-        } else {
-          dispatch({ type: menuCase.ALL, collapsed: false, toggled: false });
-        }
-      }}
-      // onMouseEnter={() => !toggled && dispatch({ type: menuCase.COLLAPSED })}
-      onBackdropClick={() => dispatch({ type: menuCase.TOGGLED })}
-      rootStyles={{
-        color: "#282f53",
-      }}
-    >
-      <div className='py-2 border-b border-gray-400'>
-        {collapsed ? (
-          <Image
-            src='/icons/icon-lina-dark.png'
-            alt='logo'
-            width={50}
-            height={50}
-            priority
-            className='m-auto'
-          />
-        ) : (
-          <Image
-            src='/icons/logo.png'
-            alt='logo'
-            width={200}
-            height={50}
-            priority
-            className='m-auto'
-          />
-        )}
-      </div>
-      <Menu transitionDuration={1000}>
-        {MenuItems(menu, collapsed)}
-      </Menu>
-    </Sidebar>
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <Drawer  variant='permanent' open={collapsed} hideBackdrop='true'>
+        <DrawerHeader>
+          {!collapsed ? (
+            <Image
+              src='/icons/icon-lina-dark.png'
+              alt='logo'
+              width={50}
+              height={50}
+              priority
+              className='m-auto'
+            />
+          ) : (
+            <Image
+              src='/icons/logo.png'
+              alt='logo'
+              width={200}
+              height={50}
+              priority
+              className='m-auto'
+            />
+          )}
+        </DrawerHeader>
+        <Divider />
+        <div className='overflow-y-auto overflow-x-hidden'>
+          <MenuItems menu={menu} collapsed={collapsed} />
+        </div>
+      </Drawer>
+    </Box>
   );
 }
 

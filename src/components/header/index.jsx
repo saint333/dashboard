@@ -2,27 +2,70 @@
 import { menuCase } from "@/context/common/MenuConstants";
 import { useMenuProvider } from "@/context/menu/MenuContext";
 import Image from "next/image";
-import { IoIosMenu } from "react-icons/io";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { useRouter } from "next/navigation";
-import Menu from "./menu";
+import MenuOptions from "./menu";
+import { styled } from "@mui/material/styles";
+import MuiAppBar from "@mui/material/AppBar";
+import { Divider, IconButton, Toolbar } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useState } from "react";
 
+export const drawerWidth = 300;
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  boxShadow: "none",
+  backgroundImage: "none",
+  backgroundColor: theme.palette.background.paper,
+  ...(!open && {
+    marginLeft: `0px`,
+    [theme.breakpoints.up("md")]: {
+      width: `calc(100% - ${theme.spacing(8)})`,
+      marginLeft: `calc(100% - ${theme.spacing(8)})`,
+    },
+  }),
+  ...(open && {
+    marginLeft: "0px",
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    [theme.breakpoints.up("md")]: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+    },
+  }),
+}));
 export default function Header() {
-  const [{ toggled }, dispatch] = useMenuProvider();
-const router = useRouter();
+  const [{ collapsed }, dispatch] = useMenuProvider();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   return (
-    <div className='sticky top-0 py-2 md:py-4 md:px-7 border-b border-gray-400 bg-white w-full'>
-      <div className='flex justify-between items-center'>
-        <button
-          className='text-2xl text-[#FF66C4]'
+    <AppBar position='fixed' open={collapsed}>
+      <Toolbar sx={{ justifyContent: "space-between", flexWrap: "wrap" }}>
+        <IconButton
           onClick={() => {
-            toggled
-              ? dispatch({ type: menuCase.TOGGLED })
+            collapsed
+              ? dispatch({ type: menuCase.COLLAPSED })
               : dispatch({ type: menuCase.COLLAPSED });
           }}
+          sx={{
+            marginRight: 5,
+          }}
         >
-          <IoIosMenu />
-        </button>
+          <MenuIcon />
+        </IconButton>
         <Image
           src='/icons/logo.png'
           alt='logo'
@@ -30,20 +73,21 @@ const router = useRouter();
           width={150}
           height={50}
           className='m-auto md:hidden'
-          onClick={() => router.push('/dashboard')}
+          onClick={() => router.push("/dashboard")}
         />
-        <div className="flex items-center">
-          <button className='text-2xl text-[#FF66C4] md:hidden'>
-            <BsThreeDotsVertical />
-          </button>
-          <div className="hidden md:block">
-            <Menu />
-          </div>
+        <IconButton className='md:hidden' onClick={handleClick}>
+          <MoreVertIcon />
+        </IconButton>
+        <div className='hidden md:block'>
+          <MenuOptions />
         </div>
-      </div>
-      <div className="md:hidden py-2 ">
-        <Menu />
-      </div>
-    </div>
+      </Toolbar>
+        {open && <div className="md:hidden">
+          <Divider/>
+          <div className="p-4">
+            <MenuOptions />
+          </div>
+        </div>}
+    </AppBar>
   );
 }

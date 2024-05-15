@@ -2,32 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Oculta el scrollbar nativo */
+::-webkit-scrollbar {
+  width: 3px; /* Anchura del scrollbar */
+  background: #c7c7d3;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Estiliza el track del scrollbar (fondo) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Color de fondo del track */
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Estiliza el thumb del scrollbar (la barra deslizante) */
+::-webkit-scrollbar-thumb {
+  background: #8497bf; /* Color del thumb */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Estiliza el thumb del scrollbar cuando está siendo activado */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Cambia el color del thumb al pasar el mouse sobre él */
 }

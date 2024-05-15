@@ -1,4 +1,4 @@
 export const initialMenuState = {
-  collapsed: false,
+  collapsed: true,
   toggled: false,
 }

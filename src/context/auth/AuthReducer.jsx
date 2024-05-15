@@ -1,7 +1,6 @@
 import { authCase } from "../common/AuthConstants";
 
 export const reducerAuth = (state, action) => {
-  console.log("🚀 ~ reducerAuth ~ action:", action)
   switch (action.type) {
     case authCase.LOGIN:
       return {
