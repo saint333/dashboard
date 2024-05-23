@@ -4,48 +4,66 @@ export const menu = [
     icon: "home",
     title: "Prueba",
     type: "item",
-    url: "/prueba",
+    url: "/dashboard",
   },
   {
-    id: 'dashboards.project',
+    id: 'dashboard.project',
     title: 'Project',
     type: 'collapse',
-    icon: 'clipboard-check',
-    url: '/dashboards/project'
+    icon: 'home',
+    url: '/dashboard',
+		children: [
+			{
+				id: 'dashboard.project',
+				title: 'Project',
+				type: 'collapse',
+				icon: 'home',
+				url: '/dashboard',
+				children: [
+					{
+						id: "prueba",
+						icon: "home",
+						title: "Prueba",
+						type: "subitem",
+						url: "/dashboard",
+					},
+				]
+			},
+		]
   },
 	{
-		id: 'dashboards',
-		title: 'Dashboards',
+		id: 'dashboard',
+		title: 'Dashboard',
 		type: 'group',
 		icon: 'home',
 		children: [
 			{
-				id: 'dashboards.project',
+				id: 'dashboard.project',
 				title: 'Project',
 				type: 'item',
 				icon: 'clipboard-check',
-				url: '/dashboards/project'
+				url: '/dashboard/project'
 			},
 			{
-				id: 'dashboards.analytics',
+				id: 'dashboard.analytics',
 				title: 'Analytics',
 				type: 'item',
 				icon: 'chart-pie',
-				url: '/dashboards/analytics'
+				url: '/dashboard/analytics'
 			},
 			{
-				id: 'dashboards.finance',
+				id: 'dashboard.finance',
 				title: 'Finance',
 				type: 'item',
 				icon: 'cash',
-				url: '/dashboards/finance'
+				url: '/dashboard/finance'
 			},
 			{
-				id: 'dashboards.crypto',
+				id: 'dashboard.crypto',
 				title: 'Crypto',
 				type: 'item',
 				icon: 'currency-dollar',
-				url: '/dashboards/crypto'
+				url: '/dashboard/crypto'
 			}
 		]
 	},

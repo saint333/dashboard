@@ -5,7 +5,7 @@ export const initialTheme = {
     },
     text: {
       primary: "#dedefd",
-      secondary: "rgb( 108, 95, 252 )",
+      // secondary: "rgb( 108, 95, 252 )",
       icon: "#dedefd"
     },
     background: {
@@ -20,11 +20,11 @@ export const initialTheme = {
   light:{
     primary: {
       main: "#FF66C4",
-      ligth: "FF66C4"
+      // ligth: "FF66C4"
     },
     text: {
       primary: "#282f53",
-      secondary: "rgb( 108, 95, 252 )",
+      // secondary: "rgb( 108, 95, 252 )",
     },
     background: {
       default: "#f0f0f5",

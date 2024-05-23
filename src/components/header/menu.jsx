@@ -43,20 +43,21 @@ export default function MenuOptions() {
 
   const handleTheme = (theme) => {
     dispatch({ type: globalCase.THEME, theme });
+    localStorage.setItem("theme", theme);
   };
 
   return (
     <div className='flex items-center justify-evenly gap-4 flex-row flex-wrap md:flex-nowrap transition-all duration-75'>
-      <IconButton>
+      <IconButton className="order-3 md:order-none">
         <CiGlobe className='text-2xl' />
       </IconButton>
       <FormControl sx={{ minWidth: 80 }} size="small" className="order-1 w-full md:order-none">
-        <InputLabel sx={{ color: 'text.primary' }}>Age</InputLabel>
+        <InputLabel sx={{ color: 'text.primary' }}>Dominios</InputLabel>
         <Select
           value={age}
           onChange={handleChange}
           autoWidth
-          label="Age"
+          label="Dominios"
         >
           <MenuItem value="">
             <em>None</em>
@@ -67,12 +68,12 @@ export default function MenuOptions() {
         </Select>
       </FormControl>
       <FormControl sx={{ minWidth: 80 }} size="small" className="order-2 w-full md:order-none">
-        <InputLabel sx={{ color: 'text.primary' }}>Age</InputLabel>
+        <InputLabel sx={{ color: 'text.primary' }}>Sucursales</InputLabel>
         <Select
           value={age}
           onChange={handleChange}
           autoWidth
-          label="Age"
+          label="Sucursales"
         >
           <MenuItem value="">
             <em>None</em>
@@ -83,15 +84,15 @@ export default function MenuOptions() {
         </Select>
       </FormControl>
       {theme.palette.mode === "dark" ? (
-        <IconButton onClick={() => handleTheme("light")}>
+        <IconButton onClick={() => handleTheme("light")} className="order-4 md:order-none">
           <BiSun className='text-2xl' />
         </IconButton>
       ) : (
-        <IconButton onClick={() => handleTheme("dark")}>
+        <IconButton onClick={() => handleTheme("dark")} className="order-4 md:order-none">
           <BiMoon className='text-2xl' />
         </IconButton>
       )}
-      <IconButton>
+      <IconButton className="order-5 md:order-none">
         {isFullScreen ? (
           <BiExitFullscreen
             className='text-2xl'
@@ -110,6 +111,7 @@ export default function MenuOptions() {
         aria-controls={user ? "account-menu" : undefined}
         aria-haspopup='true'
         aria-expanded={user ? "true" : undefined}
+        className="order-6 md:order-none"
       >
         <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
       </IconButton>

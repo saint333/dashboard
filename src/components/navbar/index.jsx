@@ -74,7 +74,6 @@ const MenuItems = ({ menu = [], collapsed }) => {
               sx={{
                 minHeight: 48,
                 justifyContent: collapsed ? "initial" : "center",
-                px: 2.5,
               }}
             >
               <ListItemIcon
@@ -119,7 +118,6 @@ const MenuItems = ({ menu = [], collapsed }) => {
               sx={{
                 minHeight: 48,
                 justifyContent: collapsed ? "initial" : "center",
-                px: 2.5,
               }}
               onClick={() => handleClick(item.id)}
             >
@@ -160,7 +158,7 @@ const MenuItems = ({ menu = [], collapsed }) => {
         <List disablePadding key={item.id}>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              sx={{ pl: 4, minHeight: 48 }}
+              sx={{ minHeight: 48 }}
               onClick={() => router.push(item.url)}
             >
               <ListItemIcon>
@@ -207,7 +205,7 @@ function Navbar() {
           )}
         </DrawerHeader>
         <Divider />
-        <div className='overflow-y-auto overflow-x-hidden'>
+        <div className='overflow-y-auto overflow-x-hidden menu'>
           <MenuItems menu={menu} collapsed={collapsed} />
         </div>
       </Drawer>

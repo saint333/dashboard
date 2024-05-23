@@ -75,7 +75,7 @@ export default function Header() {
           className='m-auto md:hidden'
           onClick={() => router.push("/dashboard")}
         />
-        <IconButton className='md:hidden' onClick={handleClick}>
+        <IconButton className='md:!hidden' onClick={handleClick}>
           <MoreVertIcon />
         </IconButton>
         <div className='hidden md:block'>

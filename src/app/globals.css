@@ -5,6 +5,7 @@
 /* Oculta el scrollbar nativo */
 ::-webkit-scrollbar {
   width: 3px; /* Anchura del scrollbar */
+  height: 3px; /* Altura del scrollbar */
   background: #c7c7d3;
 }
 
@@ -20,5 +21,16 @@
 
 /* Estiliza el thumb del scrollbar cuando está siendo activado */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Cambia el color del thumb al pasar el mouse sobre él */
+  background: #8497bfb2; /* Cambia el color del thumb al pasar el mouse sobre él */
+}
+
+.menu > ul > li > div:nth-child(1){
+  @apply px-5;
+}
+.menu > ul > li div  ul >  li > div:nth-child(1){
+  @apply pl-7 pr-5;
+}
+
+.menu > ul > li div  ul >  li div  ul >  li > div:nth-child(1){
+  @apply pl-10 pr-5;
 }

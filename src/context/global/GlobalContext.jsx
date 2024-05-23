@@ -1,5 +1,9 @@
 "use client";
-import { createContext, useContext, useEffect, useReducer, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+} from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { initialGlobalState } from "../state/GlobalState";
@@ -16,25 +20,21 @@ const getDesignTokens = (mode) => ({
 
 export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
+  const theme = window.localStorage.getItem("theme") || initialGlobalState.theme;
   return (
     <GlobalContext.Provider
       value={useReducer(reducerglobal, initialGlobalState)}
-    > 
-      <Theme>
-        <FullScreenProvider>
-          {children}
-        </FullScreenProvider>
+    >
+      <Theme theme={theme}>
+        <FullScreenProvider>{children}</FullScreenProvider>
       </Theme>
     </GlobalContext.Provider>
   );
 };
 
-const Theme = ({ children }) => {
-  const [{ theme }] = useGlobalProvider();
+const Theme = ({ theme, children }) => {
   return (
-    <ThemeProvider
-      theme={createTheme(getDesignTokens(theme))}
-    >
+    <ThemeProvider theme={createTheme(getDesignTokens(theme))}>
       <CssBaseline />
       {children}
     </ThemeProvider>
