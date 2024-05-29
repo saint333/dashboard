@@ -19,6 +19,9 @@ import { Collapse, Icon, ListSubheader } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useState } from "react";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { menuCase } from "@/context/common/MenuConstants";
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -27,6 +30,11 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  zIndex: 10,
+  position: "fixed",
+  [theme.breakpoints.up("md")]: {
+    position: "initial",
+  },
 });
 
 const closedMixin = (theme) => ({
@@ -60,6 +68,9 @@ const Drawer = styled(MuiDrawer, {
 
 const MenuItems = ({ menu = [], collapsed }) => {
   const [open, setOpen] = useState({});
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  const [{ }, dispatch] = useMenuProvider();
 
   const handleClick = (id) => {
     setOpen({ ...open, [id]: !open[id] });
@@ -68,7 +79,12 @@ const MenuItems = ({ menu = [], collapsed }) => {
   return menu.map((item) => {
     if (item.type === "item") {
       return (
-        <List key={item.id} onClick={() => router.push(item.url)}>
+        <List key={item.id} onClick={() => {
+            router.push(item.url)
+            if (!matches) {
+              dispatch({ type: menuCase.COLLAPSED })
+            }
+          }}>
           <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
@@ -177,12 +193,12 @@ const MenuItems = ({ menu = [], collapsed }) => {
 };
 
 function Navbar() {
-  const [{ collapsed, toggled }, dispatch] = useMenuProvider();
+  const [{ collapsed }] = useMenuProvider();
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Drawer  variant='permanent' open={collapsed} hideBackdrop='true'>
+      <Drawer variant='permanent' open={collapsed} hideBackdrop='true'>
         <DrawerHeader>
           {!collapsed ? (
             <Image

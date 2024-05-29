@@ -24,13 +24,16 @@
   background: #8497bfb2; /* Cambia el color del thumb al pasar el mouse sobre él */
 }
 
-.menu > ul > li > div:nth-child(1){
+.menu > ul > li > div:nth-child(1),
+.menu > ul > ul > li > div:nth-child(1){
   @apply px-5;
 }
-.menu > ul > li div  ul >  li > div:nth-child(1){
+.menu > ul > li div  ul >  li > div:nth-child(1),
+.menu > ul > ul > li div  ul >  li > div:nth-child(1){
   @apply pl-7 pr-5;
 }
 
-.menu > ul > li div  ul >  li div  ul >  li > div:nth-child(1){
+.menu > ul > li div  ul >  li div  ul >  li > div:nth-child(1),
+.menu > ul > ul > li div  ul >  li div  ul >  li > div:nth-child(1){
   @apply pl-10 pr-5;
 }

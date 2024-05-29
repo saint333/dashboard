@@ -76,9 +76,9 @@ export default function Project() {
       {/* {open && (
         <ModalClient open={open} setOpen={setOpen} title='Mantenimiento de Cliente'/>
       )} */}
-      {
+      {/* {
         open && <ModalLicense open={open} setOpen={setOpen} title="Mantenimiento de licencia" />
-      }
+      } */}
       {/* {
         open && <ModalCard open={open} setOpen={setOpen} title="Mantenimiento de tarjeta" />
       } */}
@@ -88,9 +88,9 @@ export default function Project() {
       {/* {open && (
         <ModalClient open={open} setOpen={setOpen} title='Mantenimiento del Proveedor'/>
       )} */}
-      {/* {
+      {
         open && <ModalProduct open={open} setOpen={setOpen} title="Mantenimiento de prodycto" />
-      } */}
+      }
     </>
   );
 }

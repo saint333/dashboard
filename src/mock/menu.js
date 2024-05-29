@@ -1,36 +1,53 @@
 export const menu = [
   {
-    id: "prueba",
-    icon: "home",
-    title: "Prueba",
-    type: "item",
-    url: "/dashboard",
-  },
-  {
-    id: 'dashboard.project',
-    title: 'Project',
-    type: 'collapse',
-    icon: 'home',
-    url: '/dashboard',
+		id: "inicio",
+		title: "Inicio",
+		type: "group",
 		children: [
 			{
-				id: 'dashboard.project',
-				title: 'Project',
-				type: 'collapse',
-				icon: 'home',
-				url: '/dashboard',
-				children: [
-					{
-						id: "prueba",
-						icon: "home",
-						title: "Prueba",
-						type: "subitem",
-						url: "/dashboard",
-					},
-				]
-			},
+				id: "inicio.dashboard",
+				title: "Dashboard",
+				type: "item",
+				icon: "home",
+				url: "/dashboard",
+			}
 		]
   },
+  {
+		id: "sistema",
+		title: "Sistema Integral",
+		type: "group",
+		children: [
+			{
+				id: "sistema.ventas",
+				title: "Menu Ventas",
+				type: "collapse",
+				icon: "local_mall",
+				children:[
+					{
+						id: "sistema.ventas.rapida",
+						title: "Venta Rapida",
+						type: "item",
+						url: "/dashboard/sales/quick",
+					}
+				]
+			},
+			{
+				id: "sistema.compras",
+				title: "Menu Compras",
+				type: "collapse",
+				icon: "local_shipping",
+				children:[
+					{
+						id: "sistema.compras.rapida",
+						title: "Compras Rapidas",
+						type: "item",
+						url: "/dashboard/purchases/quick",
+					}
+				]
+			}
+		]
+	},
 	{
 		id: 'dashboard',
 		title: 'Dashboard',

@@ -12,7 +12,7 @@ export const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function Main({ children }) {
   return (
-    <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
+    <Box component='main' sx={{ flexGrow: 1, p: 3, height: '100%' }}>
       <DrawerHeader />
       {children}
     </Box>

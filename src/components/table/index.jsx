@@ -6,27 +6,10 @@ import DataTableTopToolbar from "./DataTableTopToolbar";
 import { useState } from "react";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 
-function Table({ columns, data, ...rest }) {
+function Table({ columns = [], data = [], ...rest }) {
   const [states, setStates] = useState({
-    // initialState: {
-    //   density: 'spacious',
-    //   showColumnFilters: false,
-    //   showGlobalFilter: true,
-    //   columnPinning: {
-    //     left: ['mrt-row-expand', 'mrt-row-select'],
-    //     right: ['mrt-row-actions']
-    //   },
-    //   pagination: {
-    //     pageSize: 20
-    //   },
-    //   enableFullScreenToggle: false
-    // },
-    enableFullScreenToggle: false,
-    enableColumnFilterModes: true,
-    enableColumnOrdering: true,
     enableGrouping: true,
     enableColumnPinning: true,
-    enableFacetedValues: true,
     enableRowActions: true,
     muiTablePaperProps: {
       elevation: 0,
@@ -124,10 +107,9 @@ function Table({ columns, data, ...rest }) {
     columns,
     data,
     enableColumnActions: false,
-    localization: MRT_Localization_ES,
+    localization: {...MRT_Localization_ES, actions: "..."},
     initialState: {
       density: "comfortable",
-      showColumnFilters: false,
       showGlobalFilter: true,
       columnPinning: {
         left: ["mrt-row-expand", "mrt-row-select"],
@@ -136,9 +118,7 @@ function Table({ columns, data, ...rest }) {
       pagination: {
         pageSize: 20,
       },
-      enableFullScreenToggle: false,
     },
-    enableDensityToggle: false,
     ...states,
     // state:{
     //   isLoading: true,

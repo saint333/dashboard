@@ -38,7 +38,7 @@ function DataTableTopToolbar({ table }) {
 		table
 	};
 	return (
-		<div className="flex flex-col w-full py-4 px-12 border-b-1">
+		<div className="flex flex-col w-full py-4 border-b-1">
 			<Box
 				className="flex flex-col w-full items-center"
 				{...toolbarProps}
@@ -79,7 +79,7 @@ function DataTableTopToolbar({ table }) {
 									}}
 								/>
 							)}
-							<MRT_ToolbarInternalButtons table={table} />
+							{/* <MRT_ToolbarInternalButtons table={table} /> */}
 						</Box>
 					) : (
 						enableGlobalFilter &&
