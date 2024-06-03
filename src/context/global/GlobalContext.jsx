@@ -20,7 +20,8 @@ const getDesignTokens = (mode) => ({
 
 export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
-  const theme = window.localStorage.getItem("theme") || initialGlobalState.theme;
+  // const theme = window.localStorage.getItem("theme") || initialGlobalState.theme;
+  const theme = initialGlobalState.theme;
   return (
     <GlobalContext.Provider
       value={useReducer(reducerglobal, initialGlobalState)}
