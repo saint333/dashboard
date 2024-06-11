@@ -45,6 +45,34 @@ export const menu = [
 						url: "/dashboard/purchases/quick",
 					}
 				]
+			},
+			{
+				id: "sistema.gestion",
+				title: "Menu Gestion",
+				type: "collapse",
+				icon: "pie_chart",
+				children:[
+					{
+						id: "sistema.gestion.productos",
+						title: "Kardex de productos",
+						type: "item",
+						url: "/dashboard/management/products",
+					}
+				]
+			},
+			{
+				id: "sistema.mantenimiento",
+				title: "Mantenimiento",
+				type: "collapse",
+				icon: "settings",
+				children:[
+					{
+						id: "sistema.mantenimiento.almacen",
+						title: "Productos o Servicios",
+						type: "item",
+						url: "/dashboard/maintenance/products",
+					}
+				]
 			}
 		]
 	},

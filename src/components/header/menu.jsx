@@ -20,6 +20,7 @@ import { useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import { useFullScreen } from "@/context/screen/ScreenContext";
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import { signOut } from "@/app/auth";
 
 export default function MenuOptions() {
   const theme = useTheme();
@@ -42,6 +43,7 @@ export default function MenuOptions() {
   };
 
   const handleTheme = (theme) => {
+    console.log("🚀 ~ handleTheme ~ theme:", theme)
     dispatch({ type: globalCase.THEME, theme });
     localStorage.setItem("theme", theme);
   };
@@ -172,7 +174,11 @@ export default function MenuOptions() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleCloseUser}>
+        <MenuItem onClick={() => {
+          handleCloseUser() 
+          signOut()
+        }
+        }>
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>

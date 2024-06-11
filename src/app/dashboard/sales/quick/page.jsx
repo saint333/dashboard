@@ -13,12 +13,16 @@
 // import { useForm } from "react-hook-form";
 // import SaveIcon from "@mui/icons-material/Save";
 
+import { auth } from "@/app/auth";
 import AutocompleteCustom from "@/components/autocomplete";
   const data = async () => {
+    const session = await auth()
+      console.log("🚀 ~ data ~ session:", session)
       const responde = await fetch(
         "https://b1rf2oxmn2.execute-api.us-east-2.amazonaws.com/maintenance/product",
         {
           method: "GET",
+          cache: "no-store",
           headers: {
             Authorization:
               "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RpZ28iOjAsIm1lbnNhamUiOiJMb2dpbiBleGl0b3NvIiwicF9pbmlkdXN1YXJpbyI6MSwiY2hub21icmVzIjoiU0FOQ0hFWiBBUklBUywgSk9TRSBNQVgiLCJwX2luaWRkb21pbmlvX2RlZmF1bHQiOjEsInBfaW5pZHN1Y3Vyc2FsX2RlZmF1bHQiOjEsInBfaW5pZHBlcmZpbCI6MSwiaWF0IjoxNzE3MzkyODkxLCJleHAiOjE3MTczOTY0OTF9.2PU97_CKu93TuSfL4fO9ELSSFH_PlelzGobChFSj24E",
@@ -27,7 +31,7 @@ import AutocompleteCustom from "@/components/autocomplete";
       );
       const lists = await responde.json();
       console.log("peticion");
-      return lists.map((e, i) => e.chdescripcion + i)
+      return lists.map((e) => e.chdescripcion + e.p_inidproducto)
     };
 
 export default async function Quick() {
