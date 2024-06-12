@@ -175,7 +175,7 @@ export default function MenuOptions() {
           Settings
         </MenuItem>
         <MenuItem onClick={() => {
-          handleCloseUser() 
+          handleCloseUser()
           signOut()
         }
         }>
