@@ -30,7 +30,7 @@ export default function LoginForm() {
     >
       <FormControl
         variant='outlined'
-        color={errors.email ? "error" : "primary"}
+        color={errors.username ? "error" : "primary"}
       >
         <InputLabel htmlFor='outlined-adornment-email'>Email</InputLabel>
         <OutlinedInput

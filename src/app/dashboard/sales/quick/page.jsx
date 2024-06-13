@@ -15,22 +15,22 @@
 
 import { auth } from "@/app/auth";
 import AutocompleteCustom from "@/components/autocomplete";
-// const data = async () => {
-//   const responde = await fetch(
-//     "https://b1rf2oxmn2.execute-api.us-east-2.amazonaws.com/maintenance/product",
-//     {
-//       method: "GET",
-//       cache: "no-store",
-//       headers: {
-//         Authorization:
-//           "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RpZ28iOjAsIm1lbnNhamUiOiJMb2dpbiBleGl0b3NvIiwicF9pbmlkdXN1YXJpbyI6MSwiY2hub21icmVzIjoiU0FOQ0hFWiBBUklBUywgSk9TRSBNQVgiLCJwX2luaWRkb21pbmlvX2RlZmF1bHQiOjEsInBfaW5pZHN1Y3Vyc2FsX2RlZmF1bHQiOjEsInBfaW5pZHBlcmZpbCI6MSwiaWF0IjoxNzE3MzkyODkxLCJleHAiOjE3MTczOTY0OTF9.2PU97_CKu93TuSfL4fO9ELSSFH_PlelzGobChFSj24E",
-//       },
-//     }
-//   );
-//   const lists = await responde.json();
-//   console.log("peticion");
-//   return lists.map((e) => e.chdescripcion + e.p_inidproducto);
-// };
+const data = async () => {
+  const responde = await fetch(
+    "https://b1rf2oxmn2.execute-api.us-east-2.amazonaws.com/maintenance/product",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization:
+          "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RpZ28iOjAsIm1lbnNhamUiOiJMb2dpbiBleGl0b3NvIiwicF9pbmlkdXN1YXJpbyI6MSwiY2hub21icmVzIjoiU0FOQ0hFWiBBUklBUywgSk9TRSBNQVgiLCJwX2luaWRkb21pbmlvX2RlZmF1bHQiOjEsInBfaW5pZHN1Y3Vyc2FsX2RlZmF1bHQiOjEsInBfaW5pZHBlcmZpbCI6MSwiaWF0IjoxNzE4MTY2MDkzLCJleHAiOjE3MTgxNjk2OTN9.L6gBU99S1sR0HJ9Nj9L17-aLhAXAabzHkd_Th1C4kPg",
+      },
+    }
+  );
+  const lists = await responde.json();
+  console.log("peticion");
+  return lists.map((e) => e.chdescripcion + e.p_inidproducto);
+};
 
 export default async function Quick() {
   const session = await auth();
@@ -96,11 +96,11 @@ export default async function Quick() {
   //   data();
   // }, []);
 
-  // const list = await data();
+  const list = await data();
 
   return (
     <div className='grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 grid-rows-[auto] items-start'>
-      {/* <AutocompleteCustom data={list} /> */}
+      <AutocompleteCustom data={list} />
       {/* <Card>
         <CardContent>
           <Autocomplete

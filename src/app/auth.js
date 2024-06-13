@@ -1,7 +1,7 @@
 "use server";
 import NextAuth from "next-auth";
 import { authConfig } from "./authconfig";
-import Credentials from "next-auth/providers/credentials";
+import Credentials from 'next-auth/providers/credentials';
 
 const login = async (credentials) => {
   console.log("🚀 ~ login ~ credentials:", credentials);
@@ -40,7 +40,7 @@ export const { signIn, signOut, auth } = NextAuth({
         try {
           const user = await login(credentials);
           console.log("🚀 ~ authorize: ~ user:", user);
-          return user;
+          return {email: credentials.email, ...user};
         } catch (error) {
           console.log("🚀 ~ authorize ~ error:", error);
           return null;
@@ -56,7 +56,8 @@ export const { signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
       }
-      return user;
+      console.log("🚀 ~ jwt ~ token:", token);
+      return {user, token};
     },
     async session({ session, token, user }) {
       console.log("🚀 ~ session ~ user:", user);
@@ -64,8 +65,20 @@ export const { signIn, signOut, auth } = NextAuth({
       session.user.id = token.id;
       return session;
     },
+    async authorized({ auth, request }) {
+      console.log("🚀 ~ authorized ~ auth:", auth);
+      const isLoggedIn = auth?.user;
+      const isOnDashboard = request.nextUrl.pathname.startsWith("/dashboard");
+      if (isOnDashboard) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/dashboard", request.nextUrl.origin));
+      }
+      return true;
+    },
   },
-  // session: {
-  //   strategy: "jwt",
-  // },
+  session: {
+    strategy: "jwt",
+  },
 });
