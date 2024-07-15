@@ -16,25 +16,23 @@
 import { auth } from "@/app/auth";
 import AutocompleteCustom from "@/components/autocomplete";
 const data = async () => {
+  const session = await auth();
   const responde = await fetch(
     "https://b1rf2oxmn2.execute-api.us-east-2.amazonaws.com/maintenance/product",
     {
       method: "GET",
       cache: "no-store",
       headers: {
-        Authorization:
-          "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2RpZ28iOjAsIm1lbnNhamUiOiJMb2dpbiBleGl0b3NvIiwicF9pbmlkdXN1YXJpbyI6MSwiY2hub21icmVzIjoiU0FOQ0hFWiBBUklBUywgSk9TRSBNQVgiLCJwX2luaWRkb21pbmlvX2RlZmF1bHQiOjEsInBfaW5pZHN1Y3Vyc2FsX2RlZmF1bHQiOjEsInBfaW5pZHBlcmZpbCI6MSwiaWF0IjoxNzE4MTY2MDkzLCJleHAiOjE3MTgxNjk2OTN9.L6gBU99S1sR0HJ9Nj9L17-aLhAXAabzHkd_Th1C4kPg",
+        Authorization: `JWT ${session.user.token_acceso}`,
       },
     }
   );
   const lists = await responde.json();
-  console.log("peticion");
+  // console.log("🚀 ~ data ~ lists:", lists)
   return lists.map((e) => e.chdescripcion + e.p_inidproducto);
 };
 
 export default async function Quick() {
-  const session = await auth();
-  console.log("🚀 ~ data ~ session:", session);
   // const {
   //   register,
   //   handleSubmit,

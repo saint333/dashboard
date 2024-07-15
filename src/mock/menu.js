@@ -29,6 +29,12 @@ export const menu = [
 						title: "Venta Rapida",
 						type: "item",
 						url: "/dashboard/sales/quick",
+					},
+					{
+						id: "sistema.compras.consulta",
+						title: "Consulta de Ventas",
+						type: "item",
+						url: "/dashboard/sales/consult",
 					}
 				]
 			},
@@ -71,6 +77,43 @@ export const menu = [
 						title: "Productos o Servicios",
 						type: "item",
 						url: "/dashboard/maintenance/products",
+					},
+					{
+						id: "sistema.mantenimiento.clientes",
+						title: "Clientes General",
+						type: "collapse",
+						children:[
+							{
+								id: "sistema.mantenimiento.clientes.list",
+								title: "Clientes",
+								type: "item",
+								url: "/dashboard/maintenance/client/list",
+							},
+							{
+								id: "sistema.mantenimiento.clientes.license",
+								title: "Licencia",
+								type: "item",
+								url: "/dashboard/maintenance/client/license",
+							},
+							{
+								id: "sistema.mantenimiento.clientes.card",
+								title: "Tarjeta",
+								type: "item",
+								url: "/dashboard/maintenance/client/card",
+							},
+							{
+								id: "sistema.mantenimiento.clientes.resolution",
+								title: "Resolucion",
+								type: "item",
+								url: "/dashboard/maintenance/client/resolution",
+							}
+						]
+					},
+					{
+						id: "sistema.mantenimiento.proveedores",
+						title: "Proveedores",
+						type: "item",
+						url: "/dashboard/maintenance/suppliers",
 					}
 				]
 			}

@@ -22,7 +22,7 @@ import { useFullScreen } from "@/context/screen/ScreenContext";
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { signOut } from "@/app/auth";
 
-export default function MenuOptions() {
+export default function MenuOptions({domain}) {
   const theme = useTheme();
   const [{}, dispatch] = useGlobalProvider();
   const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
@@ -56,17 +56,14 @@ export default function MenuOptions() {
       <FormControl sx={{ minWidth: 80 }} size="small" className="order-1 w-full md:order-none">
         <InputLabel sx={{ color: 'text.primary' }}>Dominios</InputLabel>
         <Select
-          value={age}
-          onChange={handleChange}
+          value={domain.p_iniddominio_default}
+          onChange={(e) => console.log("🚀 ~ e:", e)}
           autoWidth
           label="Dominios"
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Twenty</MenuItem>
-          <MenuItem value={21}>Twenty one</MenuItem>
-          <MenuItem value={22}>Twenty one and a half</MenuItem>
+          {domain && domain.lists.map((item, index) => (
+            <MenuItem key={index} value={item.p_iniddominio}>{item.chnombrecomercial}</MenuItem>
+          ))}
         </Select>
       </FormControl>
       <FormControl sx={{ minWidth: 80 }} size="small" className="order-2 w-full md:order-none">

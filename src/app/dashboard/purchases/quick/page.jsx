@@ -6,12 +6,12 @@ import {
   Card,
   CardContent,
   Divider,
-  MenuItem,
   TextField,
 } from "@mui/material";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
+import { CustomInput, CustomSelect } from "@/ui/Form";
 
 export default function Quick() {
   const {
@@ -76,92 +76,57 @@ export default function Quick() {
           <CardContent>
             <div className='flex gap-3 flex-col'>
               <div className='flex gap-3 flex-col md:flex-row'>
-                <TextField
-                  label='Tipo de Compra'
-                  size='small'
-                  fullWidth
-                  error={errors.document}
-                  helperText={
-                    errors.document ? "Este campo es requerido" : null
-                  }
-                  {...register("document", { required: true })}
-                  select
-                  defaultValue={""}
-                >
-                  <MenuItem disabled value=''>
-                    -
-                  </MenuItem>
-                  <MenuItem value='DNI'>DNI</MenuItem>
-                  <MenuItem value='RUC'>RUC</MenuItem>
-                </TextField>
-
-                <TextField
-                  label='Correlativo'
-                  size='small'
-                  fullWidth
-                  error={errors.number}
-                  helperText={errors.number ? "Este campo es requerido" : null}
-                  {...register("number", { required: true })}
+                <CustomSelect
+                  register={register}
+                  errors={errors}
+                  label={"Tipo de Compra"}
+                  textKey={"document"}
+                  options={["DNI", "RUC"]}
+                />
+                <CustomInput
+                  label={"Correlativo"}
+                  register={register}
+                  errors={errors}
+                  textKey={"number"}
                 />
               </div>
               <div className='flex gap-3 flex-col md:flex-row'>
-                <TextField
-                  label='Fecha de Emision'
-                  size='small'
-                  fullWidth
+                <CustomInput
+                  label={"Fecha de Emisión"}
+                  register={register}
+                  errors={errors}
+                  textKey={"date"}
                   type='date'
                   InputLabelProps={{ shrink: true }}
-                  error={errors.date}
-                  helperText={errors.date ? "Este campo es requerido" : null}
-                  {...register("date", { required: true })}
                 />
-                <TextField
-                  label='Fecha de Ingreso'
-                  size='small'
-                  fullWidth
+                <CustomInput
+                  label={"Fecha de Ingreso"}
+                  register={register}
+                  errors={errors}
+                  textKey={"dateIncome"}
                   type='date'
                   InputLabelProps={{ shrink: true }}
-                  error={errors.date}
-                  helperText={errors.date ? "Este campo es requerido" : null}
-                  {...register("date", { required: true })}
                 />
               </div>
               <div className='flex gap-3 flex-col md:flex-row'>
-                <TextField
-                  label='Moneda'
-                  size='small'
-                  fullWidth
-                  error={errors.currency}
-                  helperText={
-                    errors.currency ? "Este campo es requerido" : null
-                  }
-                  {...register("currency", { required: true })}
-                  select
-                  defaultValue={""}
-                >
-                  <MenuItem disabled value=''>
-                    -
-                  </MenuItem>
-                  <MenuItem value='PEN'>Soles</MenuItem>
-                  <MenuItem value='USD'>Dolares</MenuItem>
-                </TextField>
-                <TextField
-                  label='Tipo cambio'
-                  size='small'
-                  fullWidth
-                  error={errors.exchange}
-                  helperText={
-                    errors.exchange ? "Este campo es requerido" : null
-                  }
-                  {...register("exchange", { required: true })}
+                <CustomSelect
+                  register={register}
+                  errors={errors}
+                  label={"Moneda"}
+                  textKey={"currency"}
+                  options={["PEN", "USD"]}
                 />
-                <TextField
-                  label='IGV'
-                  size='small'
-                  fullWidth
-                  error={errors.igv}
-                  helperText={errors.igv ? "Este campo es requerido" : null}
-                  {...register("igv", { required: true })}
+                <CustomInput
+                  errors={errors}
+                  register={register}
+                  label={"Tipo cambio"}
+                  textKey={"exchange"}
+                />
+                <CustomInput
+                  errors={errors}
+                  register={register}
+                  label={"IGV"}
+                  textKey={"igv"}
                 />
               </div>
               <Autocomplete
@@ -172,43 +137,30 @@ export default function Quick() {
                 fullWidth
                 noOptionsText='No hay opciones'
                 renderInput={(params) => (
-                  <TextField
-                  label='Proveedor RUC/DNI/OTROS'
-                  error={errors.client}
-                  helperText={
-                    errors.client ? "Este campo es requerido" : null
-                  }
-                  {...register("client", { required: true })}
-                  {...params}
+                  <CustomInput
+                    label={"Proveedor RUC/DNI/OTROS"}
+                    register={register}
+                    errors={errors}
+                    textKey={"client"}
+                    {...params}
                   />
                 )}
               />
               <div className='flex gap-3 flex-col md:flex-row'>
-                <TextField
-                  label='Factura o Boleta'
-                  size='small'
-                  fullWidth
-                  error={errors.license}
-                  helperText={errors.license ? "Este campo es requerido" : null}
-                  {...register("license", { required: true })}
-                  select
-                  defaultValue={""}
-                >
-                  <MenuItem disabled value=''>
-                    -
-                  </MenuItem>
-                  <MenuItem value='DNI'>DNI</MenuItem>
-                  <MenuItem value='RUC'>RUC</MenuItem>
-                </TextField>
-                <TextField
-                  label='Guia de Remision'
-                  size='small'
-                  fullWidth
-                  error={errors.card}
-                  helperText={errors.card ? "Este campo es requerido" : null}
-                  {...register("card", { required: true })}
+                <CustomSelect
+                  register={register}
+                  errors={errors}
+                  label={"Factura o Boleta"}
+                  textKey={"license"}
+                  options={["Boleta", "Factura"]}
                 />
-                <div className="w-full hidden md:block"></div>
+                <CustomInput
+                  label={"Guia de Remision"}
+                  register={register}
+                  errors={errors}
+                  textKey={"referralGuide"}
+                />
+                <div className='w-full hidden md:block'></div>
               </div>
             </div>
             <Divider className='!my-3' />

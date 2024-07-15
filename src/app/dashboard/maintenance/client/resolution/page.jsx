@@ -1,10 +1,10 @@
 import { auth } from "@/app/auth";
-import ProductsList from "@/components/maintenance/products";
+import ResolutionCard from "@/components/maintenance/client/resolution";
 import { Card, CardContent } from "@mui/material";
 
 const Data = async () => {
   const session = await auth();
-  const responde = await fetch(process.env.URL_API + "/maintenance/product",
+  const responde = await fetch(process.env.URL_API + "/maintenance/client/resolution",
     {
       method: "GET",
       cache: "no-store",
@@ -17,13 +17,15 @@ const Data = async () => {
   return lists
 };
 
-export default async function Product() {
+export default async function Resolution() {
   const product = await Data();
+  console.log(product)
+
   return (
     <Card>
       <CardContent>
-        <ProductsList product={product}/>
+        <ResolutionCard product={product}/>
       </CardContent>
     </Card>
-  );
+  )
 }

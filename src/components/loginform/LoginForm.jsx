@@ -26,7 +26,7 @@ export default function LoginForm() {
   return (
     <form
       action={handleSubmit(formAction)}
-      className='flex flex-col gap-5'
+      className='flex flex-col gap-5 p-4 pb-6'
     >
       <FormControl
         variant='outlined'
