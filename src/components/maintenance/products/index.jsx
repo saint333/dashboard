@@ -5,17 +5,23 @@ import { AgregarButton } from "../../button/button";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ModalProduct from "@/components/modal/product/product";
 
 export default function ProductsList({ product }) {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   useEffect(() => {
     setData(product);
   }, [product]);
@@ -60,6 +66,7 @@ export default function ProductsList({ product }) {
     ],
     []
   );
+
   const renderRowActions = (row) => {
     return (
       <div className='flex gap-2'>
@@ -93,15 +100,17 @@ export default function ProductsList({ product }) {
       </div>
     );
   };
+
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Agregar' className='w-fit' />
+      <AgregarButton text='Nuevo Producto' className='w-fit' onClick={() => setOpenModal(true)}/>
       <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
       />
+      <ModalProduct open={openModal} setOpen={setOpenModal} title='Nuevo Producto' />
     </div>
   );
 }

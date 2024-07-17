@@ -13,6 +13,7 @@ export const { signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       authorize: async (credentials) => {
+        console.log("🚀 ~ authorize: ~ credentials:", credentials)
         try {
           const user = await login(credentials);
           console.log("🚀 ~ authorize: ~ user:", user);
@@ -27,16 +28,19 @@ export const { signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     jwt({ user, token }) {
+      console.log("🚀 ~ jwt ~ user, token:", user, token)
       if (user) {
         token.id = user.id;
       }
       return { user, token };
     },
     async session({ session, token }) {
+      console.log("🚀 ~ session ~ session, token:", session, token)
       session.user.id = token.id;
       return token.token;
     },
     async signIn({ user, account, profile, email, credentials }) {
+      console.log("🚀 ~ signIn ~ user, account, profile, email, credentials:", user, account, profile, email, credentials)
       return true;
     },
   },

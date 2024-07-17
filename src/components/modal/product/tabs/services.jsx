@@ -1,172 +1,221 @@
+import { fetchDataProduct } from "@/services/maintenance/product";
 import {
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
+  InputLabel,
   MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
-import React from "react";
+import { useState } from "react";
+import { Controller } from "react-hook-form";
 
-export default function Service({ register, errors }) {
+export default function Service({
+  register,
+  errors,
+  category,
+  control,
+  setFormValue,
+}) {
+  const [valueSelect, setValueSelect] = useState({
+    category: [],
+    type: [],
+    brand: [],
+    model: [],
+    caliber: [],
+    finish: [],
+    capacity: [],
+    measure: [],
+    situation: [],
+  });
+
+  const handleCategory = async (e) => {
+    setFormValue("type", "");
+    const response = await fetchDataProduct(2, e.target.value);
+    setValueSelect({
+      ...valueSelect,
+      type: response,
+    });
+  };
+
+  const handleType = async (e) => {
+    setFormValue("brand", "");
+    const response = await fetchDataProduct(3, e.target.value);
+    setValueSelect({
+      ...valueSelect,
+      brand: response,
+    });
+  };
+
+  const handleBrand = async (e) => {
+    setFormValue("model", "");
+    const response = await fetchDataProduct(4, e.target.value);
+    setValueSelect({
+      ...valueSelect,
+      model: response,
+    });
+  };
+
+  const CustomSelect = ({ label, textKey, handleChange, children }) => {
+    return (
+      <Controller
+        name={textKey}
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth size='small'>
+            <InputLabel id={`role-${textKey}-label`} error={errors[textKey]}>
+              {label}
+            </InputLabel>
+            <Select
+              {...field}
+              labelId={`role-${textKey}-label`}
+              label={label}
+              error={errors[textKey]}
+              onChange={(e) => {
+                field.onChange(e);
+                handleChange(e);
+              }}
+            >
+              <MenuItem value=''>-</MenuItem>
+              {children}
+            </Select>
+          </FormControl>
+        )}
+        rules={{ required: "Este campo es requerido" }}
+      />
+    );
+  };
+
   return (
     <div className='flex gap-3 flex-col'>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <TextField
+        <CustomSelect
           label='Categoria'
-          {...register("category", { required: true })}
-          error={errors.category}
-          helperText={errors.category ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
+          textKey='category'
+          handleChange={handleCategory}
         >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
-        <TextField
-          label='Codigó'
-          {...register("code", { required: true })}
-          error={errors.code}
-          helperText={errors.code ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          defaultValue={""}
+          {category.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
+        <Controller
+          name='code'
+          control={control}
+          rules={{ required: "Este campo es requerido" }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label='Codigó'
+              error={errors.code}
+              fullWidth
+              size='small'
+            />
+          )}
         />
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <TextField
-          label='Tipo'
-          {...register("type", { required: true })}
-          error={errors.type}
-          helperText={errors.type ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
-        <TextField
-          label='Marca'
-          {...register("brand", { required: true })}
-          error={errors.brand}
-          helperText={errors.brand ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
+        <CustomSelect label='Tipo' textKey='type' handleChange={handleType}>
+          {valueSelect.type?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
+        <CustomSelect label='Marca' textKey='brand' handleChange={handleBrand}>
+          {valueSelect.brand?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <TextField
-          label='Modelo'
-          {...register("model", { required: true })}
-          error={errors.model}
-          helperText={errors.model ? "Este campo es requerido" : null}
-          defaultValue={""}
-          fullWidth
-          size='small'
-          select
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
-        <TextField
-          label='Calibre'
-          {...register("caliber", { required: true })}
-          error={errors.caliber}
-          helperText={errors.caliber ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
+        <CustomSelect label='Modelo' textKey='model'>
+          {valueSelect.model?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
+        <CustomSelect label='Calibre' textKey='caliber'>
+          {valueSelect.caliber?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <TextField
-          label='Acabado'
-          {...register("finish", { required: true })}
-          error={errors.finish}
-          helperText={errors.finish ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
-        <TextField
-          label='Capacidad'
-          {...register("capacity", { required: true })}
-          error={errors.capacity}
-          helperText={errors.capacity ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
+        <CustomSelect label='Acabado' textKey='finish'>
+          {valueSelect.finish?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
+        <CustomSelect label='Capacidad' textKey='capacity'>
+          {valueSelect.capacity?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
       </div>
-      <TextField
+      <Controller
+        name='description'
+        control={control}
+        rules={{ required: "Este campo es requerido" }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label='Descripción'
+            error={errors.description}
+            fullWidth
+            size='small'
+          />
+        )}
+      />
+      {/* <TextField
         label='Descripción'
         {...register("description", { required: true })}
         fullWidth
         size='small'
         error={errors.description}
         helperText={errors.description ? "Este campo es requerido" : null}
-      />
+      /> */}
       <div className='flex flex-col gap-3 md:flex-row'>
-        <TextField
-          label='Medida'
-          {...register("measure", { required: true })}
-          error={errors.measure}
-          helperText={errors.measure ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
-        <TextField
-          label='Situación'
-          {...register("situation", { required: true })}
-          error={errors.situation}
-          helperText={errors.situation ? "Este campo es requerido" : null}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-        >
-          <MenuItem value=''>-</MenuItem>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
+        <CustomSelect label='Medida' textKey='measure'>
+          {valueSelect.measure?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
+        <CustomSelect label='Situación' textKey='situation'>
+          {valueSelect.situation?.map((item, index) => (
+            <MenuItem key={index} value={item.p_inidfamiliadetalle}>
+              {item.chfamiliadetalle}
+            </MenuItem>
+          ))}
+        </CustomSelect>
       </div>
-      <FormGroup className="!flex-row">
-        <FormControlLabel control={<Checkbox />} label='Label' />
-        <FormControlLabel control={<Checkbox />} label='Required' />
-        <FormControlLabel control={<Checkbox />} label='Disabled' />
+      <FormGroup className='!flex-row'>
+        <FormControlLabel
+          control={<Checkbox {...register("requiredserie")} />}
+          label='Requiere Serie'
+        />
+        <FormControlLabel
+          control={<Checkbox {...register("web")} />}
+          label='Pagina Web'
+        />
+        <FormControlLabel
+          control={<Checkbox {...register("destacado")} />}
+          label='Destacado'
+        />
       </FormGroup>
     </div>
   );
