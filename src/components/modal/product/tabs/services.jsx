@@ -1,4 +1,3 @@
-import { fetchDataProduct } from "@/services/maintenance/product";
 import {
   Checkbox,
   FormControl,
@@ -11,6 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
+import { arrayData, handleCategory, handleModel, handleType } from "./helper";
 
 export default function Service({
   register,
@@ -18,45 +18,13 @@ export default function Service({
   category,
   control,
   setFormValue,
+  caliber,
 }) {
   const [valueSelect, setValueSelect] = useState({
-    category: [],
-    type: [],
-    brand: [],
-    model: [],
-    caliber: [],
-    finish: [],
-    capacity: [],
-    measure: [],
-    situation: [],
+    ...arrayData,
+    caliber,
+    category,
   });
-
-  const handleCategory = async (e) => {
-    setFormValue("type", "");
-    const response = await fetchDataProduct(2, e.target.value);
-    setValueSelect({
-      ...valueSelect,
-      type: response,
-    });
-  };
-
-  const handleType = async (e) => {
-    setFormValue("brand", "");
-    const response = await fetchDataProduct(3, e.target.value);
-    setValueSelect({
-      ...valueSelect,
-      brand: response,
-    });
-  };
-
-  const handleBrand = async (e) => {
-    setFormValue("model", "");
-    const response = await fetchDataProduct(4, e.target.value);
-    setValueSelect({
-      ...valueSelect,
-      model: response,
-    });
-  };
 
   const CustomSelect = ({ label, textKey, handleChange, children }) => {
     return (
@@ -94,9 +62,11 @@ export default function Service({
         <CustomSelect
           label='Categoria'
           textKey='category'
-          handleChange={handleCategory}
+          handleChange={(e) =>
+            handleCategory(e, setFormValue, setValueSelect, valueSelect)
+          }
         >
-          {category.map((item, index) => (
+          {valueSelect.category.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
             </MenuItem>
@@ -118,14 +88,20 @@ export default function Service({
         />
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <CustomSelect label='Tipo' textKey='type' handleChange={handleType}>
+        <CustomSelect
+          label='Tipo'
+          textKey='type'
+          handleChange={(e) =>
+            handleType(e, setFormValue, setValueSelect, valueSelect)
+          }
+        >
           {valueSelect.type?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
             </MenuItem>
           ))}
         </CustomSelect>
-        <CustomSelect label='Marca' textKey='brand' handleChange={handleBrand}>
+        <CustomSelect label='Marca' textKey='brand' handleChange={() => null}>
           {valueSelect.brand?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
@@ -134,14 +110,24 @@ export default function Service({
         </CustomSelect>
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <CustomSelect label='Modelo' textKey='model'>
+        <CustomSelect
+          label='Modelo'
+          textKey='model'
+          handleChange={(e) =>
+            handleModel(e, setFormValue, setValueSelect, valueSelect)
+          }
+        >
           {valueSelect.model?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
             </MenuItem>
           ))}
         </CustomSelect>
-        <CustomSelect label='Calibre' textKey='caliber'>
+        <CustomSelect
+          label='Calibre'
+          textKey='caliber'
+          handleChange={() => null}
+        >
           {valueSelect.caliber?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
@@ -150,14 +136,22 @@ export default function Service({
         </CustomSelect>
       </div>
       <div className='flex flex-col gap-3 md:flex-row'>
-        <CustomSelect label='Acabado' textKey='finish'>
+        <CustomSelect
+          label='Acabado'
+          textKey='finish'
+          handleChange={() => null}
+        >
           {valueSelect.finish?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
             </MenuItem>
           ))}
         </CustomSelect>
-        <CustomSelect label='Capacidad' textKey='capacity'>
+        <CustomSelect
+          label='Capacidad'
+          textKey='capacity'
+          handleChange={() => null}
+        >
           {valueSelect.capacity?.map((item, index) => (
             <MenuItem key={index} value={item.p_inidfamiliadetalle}>
               {item.chfamiliadetalle}
@@ -179,14 +173,6 @@ export default function Service({
           />
         )}
       />
-      {/* <TextField
-        label='Descripción'
-        {...register("description", { required: true })}
-        fullWidth
-        size='small'
-        error={errors.description}
-        helperText={errors.description ? "Este campo es requerido" : null}
-      /> */}
       <div className='flex flex-col gap-3 md:flex-row'>
         <CustomSelect label='Medida' textKey='measure'>
           {valueSelect.measure?.map((item, index) => (

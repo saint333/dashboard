@@ -8,10 +8,12 @@ import { useForm } from "react-hook-form";
 import Service from "./tabs/services";
 import { CancelButton, SaveButton } from "@/components/button/button";
 import { fetchDataProduct, ProductServices } from "@/services/maintenance/product";
+import Family from "./tabs/family";
 
 export default function ModalProduct({ open, setOpen, title }) {
   const [value, setValue] = useState(0);
   const [category, setCategory] = useState([]);
+  const [caliber, setCaliber] = useState([]);
   const {
     register,
     handleSubmit,
@@ -39,6 +41,7 @@ export default function ModalProduct({ open, setOpen, title }) {
   });
 
   const handleChange = (event, newValue) => {
+    reset();
     setValue(newValue);
   };
 
@@ -53,8 +56,9 @@ export default function ModalProduct({ open, setOpen, title }) {
   useEffect(() => {
     const fecthData = async () => {
       const response = await fetchDataProduct(1, 0);
-      console.log("🚀 ~ fecthData ~ response:", response);
       setCategory(response);
+      const responseCaliber = await fetchDataProduct(5, 0);
+      setCaliber(responseCaliber);
     };
     fecthData();
   }, []);
@@ -114,9 +118,19 @@ export default function ModalProduct({ open, setOpen, title }) {
             category={category}
             control={control}
             setFormValue={setFormValue}
+            caliber={caliber}
           />
         </CustomTabPanel>
-        <CustomTabPanel value={value} index={1}></CustomTabPanel>
+        <CustomTabPanel value={value} index={1}>
+          <Family 
+            errors={errors}
+            register={register}
+            category={category}
+            control={control}
+            setFormValue={setFormValue}
+            caliber={caliber}
+          />
+        </CustomTabPanel>
       </Box>
     </ModalBasic>
   );
