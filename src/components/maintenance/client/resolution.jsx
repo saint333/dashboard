@@ -5,31 +5,25 @@ import { AgregarButton } from "../../button/button";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ModalResolution from "@/components/modal/resolution/resolution";
 
 export default function ResolutionCard({product}) {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [openModal, setOpenModal] = useState(false);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   useEffect(() => {
     setData(product);
   }, [product]);
-
-  // {
-  //   p_inidcliente: 1,
-  //   chcodigocliente: 'CL00001',
-  //   chtipocliente: 'CIVIL',
-  //   razon: 'Perez Gomez Juan',
-  //   p_inidresolucion: 1,
-  //   chresolucion: null,
-  //   chfechavencimiento: '11/07/2024',
-  //   estado: true
-  // }
 
   const columns = useMemo(
     () => [
@@ -61,6 +55,7 @@ export default function ResolutionCard({product}) {
     ],
     []
   );
+
   const renderRowActions = (row) => {
     return (
       <div className='flex gap-2'>
@@ -94,15 +89,17 @@ export default function ResolutionCard({product}) {
       </div>
     );
   };
+
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Resolución' className='w-fit' />
+      <AgregarButton text='Nueva Resolución' className='w-fit' onClick={() => setOpenModal(true)} />
       <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
       />
+      <ModalResolution open={openModal} setOpen={setOpenModal} title="Mantenimiento de Resolución" />
     </div>
   );
 }

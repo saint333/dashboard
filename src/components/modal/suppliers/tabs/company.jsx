@@ -5,5 +5,5 @@ export default function Company({ CustomInput }) {
       <CustomInput label='N° Comercial' textKey='numberComercial' />
       <CustomInput label='Razon Social' textKey='social' />
     </div>
-  )
+  );
 }

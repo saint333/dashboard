@@ -1,7 +1,7 @@
 import React from 'react'
 import ModalBasic from "..";
-import { MenuItem, TextField } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from '@/components/button/button';
 
 export default function ModalResolution({ open, setOpen, title }) {
@@ -9,19 +9,63 @@ export default function ModalResolution({ open, setOpen, title }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    control,
+    reset
+  } = useForm({
+    defaultValues: {
+      resolution: "",
+      date: "",
+      client: "",
+    },
+  });
 
   const onSubmit = (data) => {
     console.log("🚀 ~ onSubmit ~ data:", data);
   };
+
+  const CustomSelect = ({ label, textKey, handleChange, children }) => {
+    return (
+      <Controller
+        name={textKey}
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth size='small'>
+            <InputLabel id={`role-${textKey}-label`} error={errors[textKey]}>
+              {label}
+            </InputLabel>
+            <Select
+              {...field}
+              labelId={`role-${textKey}-label`}
+              label={label}
+              error={errors[textKey]}
+              onChange={(e) => {
+                field.onChange(e);
+                handleChange(e);
+              }}
+            >
+              <MenuItem value=''>-</MenuItem>
+              {children}
+            </Select>
+          </FormControl>
+        )}
+        rules={{ required: "Este campo es requerido" }}
+      />
+    );
+  };
+
+  const handleClose = () => {
+    reset();
+    setOpen(false);
+  };
+
   return (
     <ModalBasic
       open={open}
-      handleClose={() => setOpen(false)}
+      handleClose={handleClose}
       title={title}
       actions={
         <div className='flex gap-2 justify-end'>
-          <CancelButton text='Cancelar' onClick={() => setOpen(false)} />
+          <CancelButton text='Cancelar' onClick={handleClose} />
           <SaveButton text='Guardar' onClick={handleSubmit(onSubmit)} />
         </div>
       }
@@ -58,20 +102,10 @@ export default function ModalResolution({ open, setOpen, title }) {
         style={{ border: "1px solid rgba(0, 0, 0, 0.23)", padding: "10px" }}
       >
         <legend>Datos del Cliente</legend>
-          <TextField
-            label='Cliente'
-            variant='outlined'
-            size='small'
-            fullWidth
-            select
-            error={errors.client}
-            helperText={errors.client ? "Este campo es requerido" : null}
-            {...register("client", { required: true })}
-          >
-            <MenuItem value=''>-</MenuItem>
+          <CustomSelect label='Cliente' textKey='client' handleChange={() => null}>
             <MenuItem value='Credito'>Credito</MenuItem>
             <MenuItem value='Debito'>Debito</MenuItem>
-          </TextField>
+          </CustomSelect>
       </fieldset>
       </div>
     </ModalBasic>

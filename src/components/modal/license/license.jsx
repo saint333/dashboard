@@ -3,13 +3,16 @@ import ModalBasic from "..";
 import {
   Box,
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
   FormLabel,
+  InputLabel,
   MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from "@/components/button/button";
 
 export default function ModalLicense({ open, setOpen, title }) {
@@ -17,20 +20,63 @@ export default function ModalLicense({ open, setOpen, title }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    control,
+    reset,
+  } = useForm({
+    defaultValues: {
+      license: "",
+      date: "",
+      client: "",
+    },
+  });
 
   const onSubmit = (data) => {
     console.log("🚀 ~ onSubmit ~ data:", data);
   };
 
+  const CustomSelect = ({ label, textKey, handleChange, children }) => {
+    return (
+      <Controller
+        name={textKey}
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth size='small'>
+            <InputLabel id={`role-${textKey}-label`} error={errors[textKey]}>
+              {label}
+            </InputLabel>
+            <Select
+              {...field}
+              labelId={`role-${textKey}-label`}
+              label={label}
+              error={errors[textKey]}
+              onChange={(e) => {
+                field.onChange(e);
+                handleChange(e);
+              }}
+            >
+              <MenuItem value=''>-</MenuItem>
+              {children}
+            </Select>
+          </FormControl>
+        )}
+        rules={{ required: "Este campo es requerido" }}
+      />
+    );
+  };
+
+  const handleClose = () => {
+    reset();
+    setOpen(false);
+  };
+
   return (
     <ModalBasic
       open={open}
-      handleClose={() => setOpen(false)}
+      handleClose={handleClose}
       title={title}
       actions={
         <div className='flex gap-2 justify-end'>
-          <CancelButton text='Cancelar' onClick={() => setOpen(false)} />
+          <CancelButton text='Cancelar' onClick={handleClose} />
           <SaveButton text='Guardar' onClick={handleSubmit(onSubmit)} />
         </div>
       }
@@ -76,20 +122,10 @@ export default function ModalLicense({ open, setOpen, title }) {
             <FormControlLabel control={<Checkbox />} label='Sispe' />
           </FormGroup>
         </div>
-        <TextField
-          label='Tipo Cliente'
-          {...register("client", { required: true })}
-          fullWidth
-          size='small'
-          select
-          defaultValue={""}
-          error={errors.client}
-          helperText={errors.client ? "Este campo es requerido" : null}
-        >
-          <MenuItem value=''>-</MenuItem>
+        <CustomSelect label='Tipo Cliente' textKey='client' handleChange={() => null}>
           <MenuItem value='P'>Persona</MenuItem>
           <MenuItem value='E'>Empresa</MenuItem>
-        </TextField>
+        </CustomSelect>
       </Box>
     </ModalBasic>
   );

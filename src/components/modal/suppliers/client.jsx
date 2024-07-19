@@ -1,15 +1,6 @@
 import { useState } from "react";
 import ModalBasic from "..";
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Tab,
-  Tabs,
-  TextField,
-} from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, Tab, Tabs, TextField } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import BusinessIcon from "@mui/icons-material/Business";
 import Person from "./tabs/person";
@@ -20,14 +11,14 @@ import RoomIcon from "@mui/icons-material/Room";
 import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
 
-export default function ModalClient({ open, setOpen, title }) {
+export default function ModalSuppliers({ open, setOpen, title }) {
   const [value, setValue] = useState(0);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset,
+    reset
   } = useForm({
     defaultValues: {
       ruc: "",
@@ -45,7 +36,6 @@ export default function ModalClient({ open, setOpen, title }) {
       lastNameM: "",
       date: "",
       sex: "",
-      client: "",
     },
   });
 
@@ -108,7 +98,7 @@ export default function ModalClient({ open, setOpen, title }) {
   const handleClose = () => {
     reset();
     setOpen(false);
-  };
+  }
 
   return (
     <ModalBasic
@@ -150,20 +140,10 @@ export default function ModalClient({ open, setOpen, title }) {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Person
-            register={register}
-            errors={errors}
-            CustomInput={CustomInput}
-            CustomSelect={CustomSelect}
-          />
+          <Person register={register} errors={errors} CustomInput={CustomInput} CustomSelect={CustomSelect}/>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <Company
-            register={register}
-            errors={errors}
-            CustomInput={CustomInput}
-            CustomSelect={CustomSelect}
-          />
+          <Company register={register} errors={errors} CustomInput={CustomInput} CustomSelect={CustomSelect}/>
         </CustomTabPanel>
         <Box sx={{ pt: 2 }}>
           <fieldset
@@ -175,13 +155,6 @@ export default function ModalClient({ open, setOpen, title }) {
             <div className='flex gap-3 flex-col md:flex-row'>
               <CustomInput label='Telefono' textKey='phone' />
               <CustomInput label='Correo' textKey='email' />
-            </div>
-            <div className='flex mt-3 gap-3 flex-col md:flex-row'>
-              <CustomSelect label='Tipo Cliente' textKey='client'>
-                <MenuItem value='P'>Persona</MenuItem>
-                <MenuItem value='E'>Empresa</MenuItem>
-              </CustomSelect>
-              <div className='w-full hidden md:block'></div>
             </div>
           </fieldset>
         </Box>
@@ -203,12 +176,14 @@ export default function ModalClient({ open, setOpen, title }) {
               label='Ubigeo'
               textKey='ubigeo'
               handleChange={() => {}}
-            ></CustomSelect>
+            >
+            </CustomSelect>
             <CustomSelect
               label='Pais'
               textKey='country'
               handleChange={() => {}}
-            ></CustomSelect>
+            >
+            </CustomSelect>
           </fieldset>
         </Box>
       </Box>

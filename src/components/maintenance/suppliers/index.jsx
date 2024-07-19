@@ -5,10 +5,12 @@ import { AgregarButton } from "../../button/button";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ModalSuppliers from "@/components/modal/suppliers/client";
 
 export default function Supplier({product}) {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -19,18 +21,6 @@ export default function Supplier({product}) {
   useEffect(() => {
     setData(product);
   }, [product]);
-
-  // {
-  //   p_inidproveedor: 1,
-  //   chcodigoproveedor: 'PV00001',
-  //   razon: 'SANCHEZ PRUEBA MASSS',
-  //   chtipodocumento: 'OTRO',
-  //   chnrodocumento: '12345679',
-  //   chdireccion: 'Calle Ejemplo 123 - AMAZONAS CHACHAPOYAS CHACHAPOYAS',
-  //   chtelefono: '999999999',
-  //   p_inidjurinat: 1,
-  //   estado: true
-  // }
 
   const columns = useMemo(
     () => [
@@ -67,6 +57,7 @@ export default function Supplier({product}) {
     ],
     []
   );
+
   const renderRowActions = (row) => {
     return (
       <div className='flex gap-2'>
@@ -100,15 +91,17 @@ export default function Supplier({product}) {
       </div>
     );
   };
+
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Tarjeta' className='w-fit' />
+      <AgregarButton text='Nueva Tarjeta' className='w-fit' onClick={() => setOpenModal(true)} />
       <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
       />
+      <ModalSuppliers open={openModal} setOpen={setOpenModal} title='Mantenimiento de Proveedor' />
     </div>
   );
 }
