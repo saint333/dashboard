@@ -1,5 +1,5 @@
 import { auth } from "@/app/auth";
-import KardexTable from "@/components/management/products";
+import GuideTable from "@/components/sales/guide";
 import { Card, CardContent } from "@mui/material";
 
 const Data = async () => {
@@ -17,13 +17,14 @@ const Data = async () => {
   return lists
 };
 
-export default async function Products() {
+export default async function Guide() {
   const product = await Data();
+  console.log(product)
 
   return (
     <Card>
       <CardContent>
-        <KardexTable product={[]}/>
+        <GuideTable product={[]}/>
       </CardContent>
     </Card>
   )

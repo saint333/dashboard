@@ -35,6 +35,12 @@ export const menu = [
 						title: "Consulta de Ventas",
 						type: "item",
 						url: "/dashboard/sales/consult",
+					},
+					{
+						id: "sistema.vemtas.guia",
+						title: "Guia de Remision",
+						type: "item",
+						url: "/dashboard/sales/guide",
 					}
 				]
 			},
@@ -58,6 +64,18 @@ export const menu = [
 				type: "collapse",
 				icon: "pie_chart",
 				children:[
+					{
+						id: "sistema.gestion.ingreso",
+						title: "Ingreso de Productos",
+						type: "item",
+						url: "/dashboard/management/entry",
+					},
+					{
+						id: "sistema.gestion.exhibicion",
+						title: "Separacion para Exhibicion",
+						type: "item",
+						url: "/dashboard/management/exhibition",
+					},
 					{
 						id: "sistema.gestion.productos",
 						title: "Kardex de productos",

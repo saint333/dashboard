@@ -1,16 +1,14 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
-import Table from "../../table";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { Delete, Print, Visibility } from "@mui/icons-material";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import ConsultModal from "@/components/modal/print/consult";
 
-export default function ConsultTable({product}) {
+import Table from "@/components/table";
+import { MoreHoriz, Shop } from "@mui/icons-material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+
+export default function GuideTable({product}) {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [openModal, setOpenModal] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,17 +19,7 @@ export default function ConsultTable({product}) {
   };
 
   useEffect(() => {
-    setData([
-      {
-        chcodigoproveedor: "123456",
-        razon: "Cesar",
-        chtipodocumento: "DNI",
-        chnrodocumento: "12345678",
-        chdireccion: "Av. Los Pinos",
-        chtelefono: "123456789",
-        chemail: ""
-      }
-    ]);
+    setData(product);
   }, [product]);
 
   const columns = useMemo(
@@ -96,7 +84,7 @@ export default function ConsultTable({product}) {
           aria-haspopup='true'
           onClick={handleClick}
         >
-          <MoreHorizIcon />
+          <MoreHoriz />
         </IconButton>
         <Menu
           id='long-menu'
@@ -109,30 +97,17 @@ export default function ConsultTable({product}) {
           PopoverClasses={{ paper: '!shadow-lg' }}
         >
           <MenuItem onClick={handleClose}>
-            <Visibility />
-          </MenuItem>
-          <MenuItem onClick={() => {
-            handleClose();
-            setOpenModal(true);
-          }}>
-            <Print />
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Delete />
+            <Shop />
           </MenuItem>
         </Menu>
       </div>
     );
   };
-
   return (
-    <>
     <Table
       columns={columns}
       data={data}
       renderRowActions={renderRowActions}
     />
-    <ConsultModal open={openModal} setOpen={setOpenModal} title='Facturación Electronica - Salva la Amazonia con tus facturas' />
-    </>
-  );
+  )
 }

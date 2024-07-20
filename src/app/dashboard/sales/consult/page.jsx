@@ -24,7 +24,7 @@ export default async function Consult() {
   return (
     <Card>
       <CardContent>
-        {/* <ConsultTable product={[]}/> */}
+        <ConsultTable product={[]}/>
       </CardContent>
     </Card>
   )
