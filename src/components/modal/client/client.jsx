@@ -19,6 +19,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import RoomIcon from "@mui/icons-material/Room";
 import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
+import { ClientServices } from "@/services/maintenance/client";
 
 export default function ModalClient({ open, setOpen, title }) {
   const [value, setValue] = useState(0);
@@ -30,32 +31,44 @@ export default function ModalClient({ open, setOpen, title }) {
     reset,
   } = useForm({
     defaultValues: {
-      ruc: "",
-      numberComercial: "",
-      social: "",
-      email: "",
-      phone: "",
-      name: "",
-      address: "",
-      ubigeo: "",
-      country: "",
-      document: "",
-      documentNumber: "",
-      lastNameP: "",
-      lastNameM: "",
-      date: "",
-      sex: "",
-      client: "",
+      chruc: "",
+      chnombrecomercial: "",
+      chrazonsocial: "",
+      chcorreo: "",
+      chtelefono: "",
+      chnombres: "",
+      chdireccion: "",
+      p_inidubigeo: "",
+      p_inidpais: "",
+      p_inidtipodocumento: "",
+      chnrodocumento: "",
+      chapellidopaterno: "",
+      chapellidomaterno: "",
+      chfechanacimiento: "",
+      p_inidtiposexo: "",
+      p_inidcliente: 0,
+      p_inidtipocliente: "",
+      p_inidjurinat: value === 0 ? 1 : 2,
+      p_inidpersona: 0,
+      p_inidempresa: null,
+      proceso: value === 0 ? "PERSONA" : "EMPRESA",
     },
   });
 
   const handleChange = (event, newValue) => {
+    console.log("🚀 ~ handleChange ~ newValue:", newValue);
     reset();
     setValue(newValue);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("🚀 ~ onSubmit ~ data:", data);
+    const letterAccion = "I";
+    const response = await ClientServices({
+      data,
+      letterAccion,
+    });
+    console.log(response);
   };
 
   const CustomInput = ({ label, textKey }) => (
@@ -75,7 +88,7 @@ export default function ModalClient({ open, setOpen, title }) {
     />
   );
 
-  const CustomSelect = ({ label, textKey, handleChange, children }) => {
+  const CustomSelect = ({ label, textKey, handleChange = null, children }) => {
     return (
       <Controller
         name={textKey}
@@ -92,7 +105,7 @@ export default function ModalClient({ open, setOpen, title }) {
               error={errors[textKey]}
               onChange={(e) => {
                 field.onChange(e);
-                handleChange(e);
+                handleChange && handleChange(e);
               }}
             >
               <MenuItem value=''>-</MenuItem>
@@ -173,12 +186,12 @@ export default function ModalClient({ open, setOpen, title }) {
               <DescriptionIcon color='primary' /> Datos Adicionales
             </legend>
             <div className='flex gap-3 flex-col md:flex-row'>
-              <CustomInput label='Telefono' textKey='phone' />
-              <CustomInput label='Correo' textKey='email' />
+              <CustomInput label='Telefono' textKey='chtelefono' />
+              <CustomInput label='Correo' textKey='chcorreo' />
             </div>
             <div className='flex mt-3 gap-3 flex-col md:flex-row'>
-              <CustomSelect label='Tipo Cliente' textKey='client'>
-                <MenuItem value='P'>Persona</MenuItem>
+              <CustomSelect label='Tipo Cliente' textKey='p_inidtipocliente'>
+                <MenuItem value='42'>Persona</MenuItem>
                 <MenuItem value='E'>Empresa</MenuItem>
               </CustomSelect>
               <div className='w-full hidden md:block'></div>
@@ -198,17 +211,21 @@ export default function ModalClient({ open, setOpen, title }) {
             <legend>
               <RoomIcon color='primary' /> Datos de dirección
             </legend>
-            <CustomInput label='Direccion' textKey='address' />
+            <CustomInput label='Direccion' textKey='chdireccion' />
             <CustomSelect
               label='Ubigeo'
-              textKey='ubigeo'
+              textKey='p_inidubigeo'
               handleChange={() => {}}
-            ></CustomSelect>
+            >
+              <MenuItem value='1'>jij</MenuItem>
+            </CustomSelect>
             <CustomSelect
               label='Pais'
-              textKey='country'
+              textKey='p_inidpais'
               handleChange={() => {}}
-            ></CustomSelect>
+            >
+              <MenuItem value='283'>jij</MenuItem>
+            </CustomSelect>
           </fieldset>
         </Box>
       </Box>

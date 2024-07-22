@@ -9,17 +9,17 @@ export default function Person({
   return (
     <div className='flex gap-3 flex-col p-[10px]'>
       <div className='flex gap-3 flex-col md:flex-row'>
-        <CustomSelect label='Documento' textKey='document'>
-          <MenuItem value='DNI'>DNI</MenuItem>
+        <CustomSelect label='Documento' textKey='p_inidtipodocumento' >
+          <MenuItem value='54'>DNI</MenuItem>
           <MenuItem value='RUC'>RUC</MenuItem>
         </CustomSelect>
-        <CustomInput label='N° Documento' textKey='documentNumber' />
+        <CustomInput label='N° Documento' textKey='chnrodocumento' />
       </div>
       <div className='flex gap-3 flex-col md:flex-row'>
-        <CustomInput label='Ap. Paterno' textKey='lastNameP' />
-        <CustomInput label='Ap. Materno' textKey='lastNameM' />
+        <CustomInput label='Ap. Paterno' textKey='chapellidopaterno' />
+        <CustomInput label='Ap. Materno' textKey='chapellidomaterno' />
       </div>
-      <CustomInput label='Nombres' textKey='name' />
+      <CustomInput label='Nombres' textKey='chnombres' />
       <div className='flex gap-3 flex-col md:flex-row'>
         <TextField
           size='small'
@@ -31,11 +31,11 @@ export default function Person({
           helperText={errors.date ? "Este campo es requerido" : null}
           defaultValue={""}
           InputLabelProps={{ shrink: true }}
-          {...register("date", { required: true })}
+          {...register("chfechanacimiento", { required: true })}
         />
-        <CustomSelect label='Sexo' textKey='sex'>
-          <MenuItem value='M'>Masculino</MenuItem>
-          <MenuItem value='F'>Femenino</MenuItem>
+        <CustomSelect label='Sexo' textKey='p_inidtiposexo'>
+          <MenuItem value='58'>Masculino</MenuItem>
+          <MenuItem value='59'>Femenino</MenuItem>
         </CustomSelect>
       </div>
     </div>

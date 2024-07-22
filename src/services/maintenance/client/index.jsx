@@ -1,7 +1,9 @@
 "use serve";
+import { auth } from "@/app/auth";
 
-export const ClientServices = async ({ data, accion, letterAccion }) => {
+export const ClientServices = async ({ data, letterAccion }) => {
   const session = await auth();
+  console.log("🚀 ~ ClientServices ~ session:", session)
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/maintenance/client",
     {
@@ -12,33 +14,15 @@ export const ClientServices = async ({ data, accion, letterAccion }) => {
         Authorization: `JWT ${session.user.token_acceso}`,
       },
       body: JSON.stringify({
-        p_inidcliente: 0,
-        p_iniddominio: 1,
-        p_inidtipocliente: 42,
-        chdireccion: "Calle Ejemplo 123",
-        chtelefono: "999999999",
-        chcorreo: "ejemplo@correo.com",
-        p_inidpais: 1,
-        p_inidjurinat: 1,
-        p_inidpersona: 0,
-        p_inidtipodocumento: 57,
-        chnrodocumento: "12345679",
-        chapellidopaterno: "SANCHEZ",
-        chapellidomaterno: "PRUEBA",
-        chnombres: "MASSS",
-        chfechanacimiento: "01/07/2024",
-        p_inidtiposexo: 1,
-        p_inidempresa: null,
-        chrazonsocial: null,
-        chnombrecomercial: null,
-        chruc: null,
-        p_inidubigeo: 1,
-        accion: "I",
-        proceso: "PERSONA",
+        p_iniddominio: session.user.p_iniddominio_default,
+        accion: letterAccion,
+        ...data
       }),
     }
   );
-  return response.json();
+  const dataEnd = await response.json();
+  console.log("🚀 ~ ClientServices ~ dataEnd:", dataEnd)
+  return dataEnd;
 };
 
 export const CardServices = async ({ data, accion, letterAccion }) => {

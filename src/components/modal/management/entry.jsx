@@ -1,9 +1,22 @@
 import { CancelButton, SaveButton } from "@/components/button/button";
 import ModalBasic from "..";
 import { Controller, useForm } from "react-hook-form";
-import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Card,
+  CardContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
+import Table from "@/components/table";
 
 export default function EntryModal({ open, setOpen, title }) {
+  const [valueSelect, setValueSelect] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -19,7 +32,7 @@ export default function EntryModal({ open, setOpen, title }) {
 
   const onSubmit = async (data) => {
     console.log(data);
-  }
+  };
 
   const CustomSelect = ({ label, textKey, handleChange, children }) => {
     return (
@@ -80,7 +93,33 @@ export default function EntryModal({ open, setOpen, title }) {
         </div>
       }
     >
-      prueba
+      <div className="flex flex-col lg:flex-row gap-3">
+        <div className="flex-1">
+          <Card>
+            <CardContent>
+              <Autocomplete
+                disablePortal
+                id='controlled-demo'
+                options={[]}
+                value={valueSelect}
+                onChange={(event, newValue) => {
+                  setValueSelect(newValue);
+                }}
+                size="small"
+                renderInput={(params) => (
+                  <TextField {...params} label='controlled' variant='outlined' />
+                )}
+              />
+              <Table enableRowActions={false}/>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="flex-1">
+        <Card>
+        <CardContent></CardContent>
+        </Card>
+        </div>
+      </div>
     </ModalBasic>
-  )
+  );
 }
