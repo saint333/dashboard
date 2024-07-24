@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ModalBasic from "..";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from '@/components/button/button';
+import { commonServices } from '@/services';
+import { ResolucionServices } from '@/services/maintenance/client';
 
 export default function ModalResolution({ open, setOpen, title }) {
+  const [cliente, setCliente] = useState([]);
   const {
     register,
     handleSubmit,
@@ -13,14 +16,17 @@ export default function ModalResolution({ open, setOpen, title }) {
     reset
   } = useForm({
     defaultValues: {
-      resolution: "",
-      date: "",
-      client: "",
+      chresolucion: "",
+      chfechavencimiento: "",
+      p_inidcliente: "",
+      p_inidresolucion: null,
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+  const onSubmit = async (data) => {
+    const letterAccion = "I";
+    const response = await ResolucionServices({ data, letterAccion });
+    handleClose();
   };
 
   const CustomSelect = ({ label, textKey, handleChange, children }) => {
@@ -58,6 +64,15 @@ export default function ModalResolution({ open, setOpen, title }) {
     setOpen(false);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const persona = await commonServices({ letterAccion: 12 });
+      const empresa = await commonServices({ letterAccion: 13 });
+      setCliente([...persona, ...empresa]);
+    };
+    fetchData();
+  }, []);
+
   return (
     <ModalBasic
       open={open}
@@ -81,9 +96,9 @@ export default function ModalResolution({ open, setOpen, title }) {
             variant='outlined'
             size='small'
             fullWidth
-            error={errors.resolution}
-            helperText={errors.resolution ? "Este campo es requerido" : null}
-            {...register("resolution", { required: true })}
+            error={errors.chresolucion}
+            helperText={errors.chresolucion ? "Este campo es requerido" : null}
+            {...register("chresolucion", { required: true })}
           />
           <TextField
             label='F. Vencimiento'
@@ -91,10 +106,10 @@ export default function ModalResolution({ open, setOpen, title }) {
             size='small'
             fullWidth
             InputLabelProps={{ shrink: true }}
-            error={errors.date}
+            error={errors.chfechavencimiento}
             type='date'
-            helperText={errors.date ? "Este campo es requerido" : null}
-            {...register("date", { required: true })}
+            helperText={errors.chfechavencimiento ? "Este campo es requerido" : null}
+            {...register("chfechavencimiento", { required: true })}
           />
         </div>
       </fieldset>
@@ -102,9 +117,15 @@ export default function ModalResolution({ open, setOpen, title }) {
         style={{ border: "1px solid rgba(0, 0, 0, 0.23)", padding: "10px" }}
       >
         <legend>Datos del Cliente</legend>
-          <CustomSelect label='Cliente' textKey='client' handleChange={() => null}>
-            <MenuItem value='Credito'>Credito</MenuItem>
-            <MenuItem value='Debito'>Debito</MenuItem>
+          <CustomSelect label='Cliente' textKey='p_inidcliente' handleChange={() => null}>
+          {cliente.map((item) => (
+            <MenuItem
+              key={item.p_inidmaestrodetalle}
+              value={item.p_inidmaestrodetalle}
+            >
+              {item.chmaestrodetalle}
+            </MenuItem>
+          ))}
           </CustomSelect>
       </fieldset>
       </div>

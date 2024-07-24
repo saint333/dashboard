@@ -5,21 +5,27 @@ export default function Person({
   errors,
   CustomSelect,
   CustomInput,
+  cliente
 }) {
   return (
     <div className='flex gap-3 flex-col p-[10px]'>
       <div className='flex gap-3 flex-col md:flex-row'>
-        <CustomSelect label='Documento' textKey='document'>
-          <MenuItem value='DNI'>DNI</MenuItem>
-          <MenuItem value='RUC'>RUC</MenuItem>
+        <CustomSelect label='Documento' textKey='p_inidtipodocumento'>
+          {
+            cliente.map((item) => (
+              <MenuItem key={item.p_inidmaestrodetalle} value={item.p_inidmaestrodetalle}>
+                {item.chmaestrodetalle}
+              </MenuItem>
+            ))
+          }
         </CustomSelect>
-        <CustomInput label='N° Documento' textKey='documentNumber' />
+        <CustomInput label='N° Documento' textKey='chnrodocumento' />
       </div>
       <div className='flex gap-3 flex-col md:flex-row'>
-        <CustomInput label='Ap. Paterno' textKey='lastNameP' />
-        <CustomInput label='Ap. Materno' textKey='lastNameM' />
+        <CustomInput label='Ap. Paterno' textKey='chapellidopaterno' />
+        <CustomInput label='Ap. Materno' textKey='chapellidomaterno' />
       </div>
-      <CustomInput label='Nombres' textKey='name' />
+      <CustomInput label='Nombres' textKey='chnombres' />
       <div className='flex gap-3 flex-col md:flex-row'>
         <TextField
           size='small'
@@ -27,15 +33,15 @@ export default function Person({
           type='date'
           variant='outlined'
           className='w-full'
-          error={errors.date}
-          helperText={errors.date ? "Este campo es requerido" : null}
+          error={errors.chfechanacimiento}
+          helperText={errors.chfechanacimiento ? "Este campo es requerido" : null}
           defaultValue={""}
           InputLabelProps={{ shrink: true }}
-          {...register("date", { required: true })}
+          {...register("chfechanacimiento", { required: true })}
         />
-        <CustomSelect label='Sexo' textKey='sex'>
-          <MenuItem value='M'>Masculino</MenuItem>
-          <MenuItem value='F'>Femenino</MenuItem>
+        <CustomSelect label='Sexo' textKey='p_inidtiposexo'>
+          <MenuItem value='58'>Masculino</MenuItem>
+          <MenuItem value='59'>Femenino</MenuItem>
         </CustomSelect>
       </div>
     </div>

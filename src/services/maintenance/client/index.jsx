@@ -25,7 +25,7 @@ export const ClientServices = async ({ data, letterAccion }) => {
   return dataEnd;
 };
 
-export const CardServices = async ({ data, accion, letterAccion }) => {
+export const CardServices = async ({ data, letterAccion }) => {
   const session = await auth();
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/card",
@@ -37,24 +37,15 @@ export const CardServices = async ({ data, accion, letterAccion }) => {
         Authorization: `JWT ${session.user.token_acceso}`,
       },
       body: JSON.stringify({
-        p_inidtarjeta: null,
-        p_inidcliente: 1,
-        chtarjeta: "ABC123",
-        p_inidmodalidad: 789,
-        modalidad: "DEFENSA PERSONAL-L1",
-        chtipo: "Tipo1",
-        chmodelo: "ModeloX",
-        chmarca: "MarcaY",
-        chcalibre: "CalibreZ",
-        chserie: "Serie1234",
-        accion: "I",
+        ...data,
+        accion: letterAccion,
       }),
     }
   );
   return response.json();
 };
 
-export const LicenseServices = async ({ data, accion, letterAccion }) => {
+export const LicenseServices = async ({ data, letterAccion }) => {
   const session = await auth();
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/license",
@@ -66,23 +57,15 @@ export const LicenseServices = async ({ data, accion, letterAccion }) => {
         Authorization: `JWT ${session.user.token_acceso}`,
       },
       body: JSON.stringify({
-        p_inidlicencia: null,
-        p_inidcliente: 1,
-        chlicencia: "LICDDD8",
-        bodefenzapersonal: true,
-        bocaza: false,
-        bodeporte: true,
-        boseguridaprivada: false,
-        bosispe: true,
-        chfechavencimiento: "11/07/2024",
-        accion: "I",
+        ...data,
+        accion: letterAccion,
       }),
     }
   );
   return response.json();
 };
 
-export const ResolucionServices = async ({ data, accion, letterAccion }) => {
+export const ResolucionServices = async ({ data, letterAccion }) => {
   const session = await auth();
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/resolution",
@@ -94,11 +77,8 @@ export const ResolucionServices = async ({ data, accion, letterAccion }) => {
         Authorization: `JWT ${session.user.token_acceso}`,
       },
       body: JSON.stringify({
-        p_inidresolucion: null,
-        p_inidcliente: 1,
-        chresolucion: "RES123",
-        chfechavencimiento: "11/07/2024",
-        accion: "I",
+        ...data,
+        accion: letterAccion,
       }),
     }
   );

@@ -31,9 +31,9 @@ export default function ModalClient({ open, setOpen, title }) {
     reset,
   } = useForm({
     defaultValues: {
-      chruc: "",
-      chnombrecomercial: "",
-      chrazonsocial: "",
+      chruc: null,
+      chnombrecomercial: null,
+      chrazonsocial: null,
       chcorreo: "",
       chtelefono: "",
       chnombres: "",
@@ -68,7 +68,7 @@ export default function ModalClient({ open, setOpen, title }) {
       data,
       letterAccion,
     });
-    console.log(response);
+    handleClose()
   };
 
   const CustomInput = ({ label, textKey }) => (
@@ -217,7 +217,7 @@ export default function ModalClient({ open, setOpen, title }) {
               textKey='p_inidubigeo'
               handleChange={() => {}}
             >
-              <MenuItem value='1'>jij</MenuItem>
+              <MenuItem value={1}>jij</MenuItem>
             </CustomSelect>
             <CustomSelect
               label='Pais'

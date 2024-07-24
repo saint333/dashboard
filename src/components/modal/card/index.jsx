@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ModalBasic from "..";
 import {
   FormControl,
@@ -9,29 +9,39 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from "@/components/button/button";
+import { commonServices } from "@/services";
+import { CardServices } from "@/services/maintenance/client";
 
 export default function ModalCard({ open, setOpen, title }) {
+  const [modalidad, setModalidad] = useState([]);
+  const [cliente, setCliente] = useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
+    setValue
   } = useForm({
     defaultValues: {
-      number: "",
-      modality: "",
-      type: "",
-      brand: "",
-      serial: "",
-      model: "",
-      caliber: "",
-      client: "",
+      chtarjeta: "",
+      modalidad: "",
+      chtipo: "",
+      chmarca: "",
+      chserie: "",
+      chmodelo: "",
+      chcalibre: "",
+      p_inidcliente: "",
+      p_inidmodalidad: "",
+      p_inidtarjeta: null,
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+  const onSubmit = async (data) => {
+    const letterAccion = "I"
+    const response = await CardServices({ data, letterAccion });
+    console.log("🚀 ~ onSubmit ~ data:", response)
+    handleClose();
   };
 
   const CustomInput = ({ label, textKey }) => (
@@ -68,7 +78,7 @@ export default function ModalCard({ open, setOpen, title }) {
               error={errors[textKey]}
               onChange={(e) => {
                 field.onChange(e);
-                handleChange(e);
+                handleChange && handleChange(e);
               }}
             >
               <MenuItem value=''>-</MenuItem>
@@ -85,6 +95,17 @@ export default function ModalCard({ open, setOpen, title }) {
     reset();
     setOpen(false);
   };
+
+  useEffect(() => {
+    const fetchModalidad = async () => {
+      const data = await commonServices({ letterAccion: 14})
+      const persona = await commonServices({ letterAccion: 12})
+      const empresa = await commonServices({ letterAccion: 13})
+      setModalidad(data);
+      setCliente([...persona, ...empresa]);
+    }
+    fetchModalidad();
+  }, []);
 
   return (
     <ModalBasic
@@ -104,14 +125,19 @@ export default function ModalCard({ open, setOpen, title }) {
         >
           <legend>Datos de la Tarjeta</legend>
           <div className='flex gap-3 flex-col md:flex-row'>
-            <CustomInput label='N° Tarjeta' textKey='number' />
+            <CustomInput label='N° Tarjeta' textKey='chtarjeta' />
             <CustomSelect
               label='Modalidad'
-              textKey='modality'
-              handleChange={() => null}
+              textKey='modalidad'
+              handleChange={(e) => {
+                setValue("p_inidmodalidad", modalidad.find(item => item.chmaestrodetalle === e.target.value).p_inidmaestrodetalle);
+              }}
             >
-              <MenuItem value='Credito'>Credito</MenuItem>
-              <MenuItem value='Debito'>Debito</MenuItem>
+              {
+                modalidad.map(item => (
+                  <MenuItem key={item.p_inidmaestrodetalle} value={item.chmaestrodetalle}>{item.chmaestrodetalle}</MenuItem>
+                ))
+              }
             </CustomSelect>
           </div>
         </fieldset>
@@ -121,15 +147,15 @@ export default function ModalCard({ open, setOpen, title }) {
         >
           <legend>Datos del Arma</legend>
           <div className='flex gap-3 flex-col md:flex-row'>
-            <CustomInput label='Tipo' textKey='type' />
-            <CustomInput label='Modelo' textKey='model' />
+            <CustomInput label='Tipo' textKey='chtipo' />
+            <CustomInput label='Modelo' textKey='chmodelo' />
           </div>
           <div className='flex gap-3 flex-col md:flex-row'>
-            <CustomInput label='Marca' textKey='brand' />
-            <CustomInput label='Calibre' textKey='caliber' />
+            <CustomInput label='Marca' textKey='chmarca' />
+            <CustomInput label='Calibre' textKey='chcalibre' />
           </div>
           <div className='flex gap-3 flex-col md:flex-row'>
-            <CustomInput label='Serie' textKey='serial' />
+            <CustomInput label='Serie' textKey='chserie' />
             <div className='hidden md:block w-full'></div>
           </div>
         </fieldset>
@@ -139,11 +165,13 @@ export default function ModalCard({ open, setOpen, title }) {
           <legend>Datos del Cliente</legend>
           <CustomSelect
             label='Cliente'
-            textKey='client'
-            handleChange={() => null}
+            textKey='p_inidcliente'
           >
-            <MenuItem value='Credito'>Credito</MenuItem>
-            <MenuItem value='Debito'>Debito</MenuItem>
+            {
+              cliente.map(item => (
+                <MenuItem key={item.p_inidmaestrodetalle} value={item.p_inidmaestrodetalle}>{item.chmaestrodetalle}</MenuItem>
+              ))
+            }
           </CustomSelect>
         </fieldset>
       </div>

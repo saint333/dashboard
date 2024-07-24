@@ -1,6 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalBasic from "..";
-import { Box, FormControl, InputLabel, MenuItem, Select, Tab, Tabs, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tab,
+  Tabs,
+  TextField,
+} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import BusinessIcon from "@mui/icons-material/Business";
 import Person from "./tabs/person";
@@ -10,32 +20,44 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import RoomIcon from "@mui/icons-material/Room";
 import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
+import { commonServices } from "@/services";
+import { ubigeo } from "@/util/ubigeo";
+import { actionSupplier, SupplierServices } from "@/services/maintenance/suppliers";
 
 export default function ModalSuppliers({ open, setOpen, title }) {
   const [value, setValue] = useState(0);
+  const [paises, setPaises] = useState([]);
+  const [cliente, setCliente] = useState([]);
+  const [inputValue, setInputValue] = useState();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    reset
+    reset,
+    setValue: setFormValue,
   } = useForm({
     defaultValues: {
-      ruc: "",
-      numberComercial: "",
-      social: "",
-      email: "",
-      phone: "",
-      name: "",
-      address: "",
-      ubigeo: "",
-      country: "",
-      document: "",
-      documentNumber: "",
-      lastNameP: "",
-      lastNameM: "",
-      date: "",
-      sex: "",
+      chruc: "",
+      chnombrecomercial: "",
+      chrazonsocial: "",
+      chcorreo: "",
+      chtelefono: "",
+      chnombres: "",
+      chdireccion: "",
+      p_inidubigeo: "",
+      p_inidpais: "",
+      p_inidtipodocumento: "",
+      chnrodocumento: "",
+      chapellidopaterno: "",
+      chapellidomaterno: "",
+      chfechanacimiento: "",
+      p_inidtiposexo: "",
+      proceso: value === 0 ? "PERSONA" : "EMPRESA",
+      p_inidempresa: null,
+      p_inidpersona: 0,
+      p_inidjurinat: value === 0 ? 1 : 2,
+      p_inidproveedor: 0,
     },
   });
 
@@ -44,8 +66,11 @@ export default function ModalSuppliers({ open, setOpen, title }) {
     setValue(newValue);
   };
 
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+  const onSubmit = async (data) => {
+    const letterAccion = "I";
+    const response = await SupplierServices({ data, letterAccion });
+    handleClose();
+    actionSupplier();
   };
 
   const CustomInput = ({ label, textKey }) => (
@@ -82,7 +107,7 @@ export default function ModalSuppliers({ open, setOpen, title }) {
               error={errors[textKey]}
               onChange={(e) => {
                 field.onChange(e);
-                handleChange(e);
+                handleChange && handleChange(e);
               }}
             >
               <MenuItem value=''>-</MenuItem>
@@ -98,7 +123,18 @@ export default function ModalSuppliers({ open, setOpen, title }) {
   const handleClose = () => {
     reset();
     setOpen(false);
-  }
+    setInputValue();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const persona = await commonServices({ letterAccion: 15 });
+      const pais = await commonServices({ letterAccion: 17 });
+      setCliente(persona);
+      setPaises(pais);
+    };
+    fetchData();
+  }, []);
 
   return (
     <ModalBasic
@@ -140,10 +176,21 @@ export default function ModalSuppliers({ open, setOpen, title }) {
           </Tabs>
         </Box>
         <CustomTabPanel value={value} index={0}>
-          <Person register={register} errors={errors} CustomInput={CustomInput} CustomSelect={CustomSelect}/>
+          <Person
+            register={register}
+            errors={errors}
+            CustomInput={CustomInput}
+            CustomSelect={CustomSelect}
+            cliente={cliente}
+          />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
-          <Company register={register} errors={errors} CustomInput={CustomInput} CustomSelect={CustomSelect}/>
+          <Company
+            register={register}
+            errors={errors}
+            CustomInput={CustomInput}
+            CustomSelect={CustomSelect}
+          />
         </CustomTabPanel>
         <Box sx={{ pt: 2 }}>
           <fieldset
@@ -153,8 +200,8 @@ export default function ModalSuppliers({ open, setOpen, title }) {
               <DescriptionIcon color='primary' /> Datos Adicionales
             </legend>
             <div className='flex gap-3 flex-col md:flex-row'>
-              <CustomInput label='Telefono' textKey='phone' />
-              <CustomInput label='Correo' textKey='email' />
+              <CustomInput label='Telefono' textKey='chtelefono' />
+              <CustomInput label='Correo' textKey='chcorreo' />
             </div>
           </fieldset>
         </Box>
@@ -171,18 +218,45 @@ export default function ModalSuppliers({ open, setOpen, title }) {
             <legend>
               <RoomIcon color='primary' /> Datos de dirección
             </legend>
-            <CustomInput label='Direccion' textKey='address' />
-            <CustomSelect
-              label='Ubigeo'
-              textKey='ubigeo'
-              handleChange={() => {}}
-            >
-            </CustomSelect>
+            <CustomInput label='Direccion' textKey='chdireccion' />
+            <Autocomplete
+              freeSolo
+              id='free-solo-2-demo'
+              disableClearable
+              value={inputValue}
+              onChange={(event, newValue) => {
+                setInputValue(newValue);
+                setFormValue('p_inidubigeo', newValue.p_inidubigeo);
+              }}
+              options={ubigeo}
+              getOptionLabel={(option) => option.chdepartamento + ' - ' + option.chprovincia + ' - ' + option.chdistrito}
+              size="small"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label='Ubigeo'
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                  error={errors.p_inidubigeo}
+                  InputLabelProps={{error: errors.p_inidubigeo}}
+                />
+              )}
+            />
             <CustomSelect
               label='Pais'
-              textKey='country'
+              textKey='p_inidpais'
               handleChange={() => {}}
             >
+              {paises.map((item) => (
+                <MenuItem
+                  key={item.p_inidmaestrodetalle}
+                  value={item.p_inidmaestrodetalle}
+                >
+                  {item.chmaestrodetalle}
+                </MenuItem>
+              ))}
             </CustomSelect>
           </fieldset>
         </Box>

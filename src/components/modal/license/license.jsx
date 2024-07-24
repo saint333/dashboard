@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ModalBasic from "..";
 import {
   Box,
@@ -14,8 +14,11 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { CancelButton, SaveButton } from "@/components/button/button";
+import { commonServices } from "@/services";
+import { LicenseServices } from "@/services/maintenance/client";
 
 export default function ModalLicense({ open, setOpen, title }) {
+  const [cliente, setCliente] = useState([]);
   const {
     register,
     handleSubmit,
@@ -24,14 +27,22 @@ export default function ModalLicense({ open, setOpen, title }) {
     reset,
   } = useForm({
     defaultValues: {
-      license: "",
-      date: "",
-      client: "",
+      chlicencia: "",
+      chfechavencimiento: "",
+      p_inidcliente: "",
+      p_inidlicencia: null,
+      bodefenzapersonal: false,
+      bocaza: false,
+      bodeporte: false,
+      boseguridaprivada: false,
+      bosispe: false,
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
+  const onSubmit = async (data) => {
+    const letterAccion = "I";
+    const response = await LicenseServices ({ data, letterAccion });
+    handleClose();
   };
 
   const CustomSelect = ({ label, textKey, handleChange, children }) => {
@@ -69,6 +80,15 @@ export default function ModalLicense({ open, setOpen, title }) {
     setOpen(false);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const persona = await commonServices({ letterAccion: 12 });
+      const empresa = await commonServices({ letterAccion: 13 });
+      setCliente([...persona, ...empresa]);
+    };
+    fetchData();
+  }, []);
+
   return (
     <ModalBasic
       open={open}
@@ -93,9 +113,9 @@ export default function ModalLicense({ open, setOpen, title }) {
             variant='outlined'
             size='small'
             fullWidth
-            error={errors.license}
-            helperText={errors.license ? "Este campo es requerido" : null}
-            {...register("license", { required: true })}
+            error={errors.chlicencia}
+            helperText={errors.chlicencia ? "Este campo es requerido" : null}
+            {...register("chlicencia", { required: true })}
           />
           <TextField
             label='F. Vencimiento'
@@ -104,27 +124,51 @@ export default function ModalLicense({ open, setOpen, title }) {
             InputLabelProps={{ shrink: true }}
             fullWidth
             type='date'
-            error={errors.date}
-            helperText={errors.date ? "Este campo es requerido" : null}
-            {...register("date", { required: true })}
+            error={errors.chfechavencimiento}
+            helperText={
+              errors.chfechavencimiento ? "Este campo es requerido" : null
+            }
+            {...register("chfechavencimiento", { required: true })}
           />
         </div>
         <div>
           <FormLabel component='legend'>Modalidades</FormLabel>
           <FormGroup>
-            <FormControlLabel control={<Checkbox />} label='Defensa Personal' />
-            <FormControlLabel control={<Checkbox />} label='Caza' />
-            <FormControlLabel control={<Checkbox />} label='Deporte' />
             <FormControlLabel
-              control={<Checkbox />}
+              control={<Checkbox {...register("bodefenzapersonal")} />}
+              label='Defensa Personal'
+            />
+            <FormControlLabel
+              control={<Checkbox {...register("bocaza")} />}
+              label='Caza'
+            />
+            <FormControlLabel
+              control={<Checkbox {...register("bodeporte")} />}
+              label='Deporte'
+            />
+            <FormControlLabel
+              control={<Checkbox {...register("boseguridaprivada")} />}
               label='Seguridad Privada'
             />
-            <FormControlLabel control={<Checkbox />} label='Sispe' />
+            <FormControlLabel
+              control={<Checkbox {...register("bosispe")} />}
+              label='Sispe'
+            />
           </FormGroup>
         </div>
-        <CustomSelect label='Tipo Cliente' textKey='client' handleChange={() => null}>
-          <MenuItem value='P'>Persona</MenuItem>
-          <MenuItem value='E'>Empresa</MenuItem>
+        <CustomSelect
+          label='Tipo Cliente'
+          textKey='p_inidcliente'
+          handleChange={() => null}
+        >
+          {cliente.map((item) => (
+            <MenuItem
+              key={item.p_inidmaestrodetalle}
+              value={item.p_inidmaestrodetalle}
+            >
+              {item.chmaestrodetalle}
+            </MenuItem>
+          ))}
         </CustomSelect>
       </Box>
     </ModalBasic>

@@ -117,7 +117,7 @@ function Table({ columns = [], data = [], ...rest }) {
         right: ["mrt-row-actions"],
       },
       pagination: {
-        pageSize: 20,
+        pageSize: 10,
       },
     },
     ...states,
