@@ -6,12 +6,14 @@ import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalClient from "@/components/modal/client/client";
+import { DetailClientServices } from "@/services/maintenance/client";
 
 export default function ClientList({ product }) {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [openModal, setOpenModal] = useState(false);
+  const [client, setClient] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -84,7 +86,7 @@ export default function ClientList({ product }) {
           onClose={handleClose}
           PopoverClasses={{ paper: '!shadow-lg' }}
         >
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={() => handleEdit(row)}>
             <Edit />
           </MenuItem>
           <MenuItem onClick={handleClose}>
@@ -93,6 +95,13 @@ export default function ClientList({ product }) {
         </Menu>
       </div>
     );
+  };
+
+  const handleEdit = async(row) => {
+    const response = await DetailClientServices({ client: row.row.original.p_inidcliente, legal: row.row.original.p_inidjurinat });
+    setClient(response[0]);
+    setOpenModal(true);
+    handleClose();
   };
 
   return (
@@ -104,7 +113,7 @@ export default function ClientList({ product }) {
         data={data}
         renderRowActions={renderRowActions}
       />
-      <ModalClient open={openModal} setOpen={setOpenModal} title="Mantenimiento de Cliente" />
+      <ModalClient open={openModal} setOpen={setOpenModal} title="Mantenimiento de Cliente" client={client} />
     </div>
   );
 }

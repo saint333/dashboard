@@ -84,3 +84,19 @@ export const ResolucionServices = async ({ data, letterAccion }) => {
   );
   return response.json();
 };
+
+export const DetailClientServices = async ({client, legal}) => {
+  const session = await auth();
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + `/maintenance/client/detail?p_inidcliente=${client}&p_inidjurinat=${legal}`,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  return response.json();
+}

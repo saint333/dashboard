@@ -5,13 +5,19 @@ export default function Person({
   errors,
   CustomSelect,
   CustomInput,
+  cliente
 }) {
   return (
     <div className='flex gap-3 flex-col p-[10px]'>
       <div className='flex gap-3 flex-col md:flex-row'>
         <CustomSelect label='Documento' textKey='p_inidtipodocumento' >
-          <MenuItem value='54'>DNI</MenuItem>
-          <MenuItem value='RUC'>RUC</MenuItem>
+        {
+            cliente.map((item) => (
+              <MenuItem key={item.p_inidmaestrodetalle} value={item.p_inidmaestrodetalle}>
+                {item.chmaestrodetalle}
+              </MenuItem>
+            ))
+          }
         </CustomSelect>
         <CustomInput label='N° Documento' textKey='chnrodocumento' />
       </div>

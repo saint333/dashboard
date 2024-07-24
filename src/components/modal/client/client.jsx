@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalBasic from "..";
 import {
+  Autocomplete,
   Box,
   FormControl,
   InputLabel,
@@ -20,39 +21,48 @@ import RoomIcon from "@mui/icons-material/Room";
 import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
 import { ClientServices } from "@/services/maintenance/client";
+import { ubigeo } from "@/util/ubigeo";
+import { commonServices } from "@/services";
 
-export default function ModalClient({ open, setOpen, title }) {
+export default function ModalClient({ open, setOpen, title, client }) {
   const [value, setValue] = useState(0);
+  const [paises, setPaises] = useState([]);
+  const [cliente, setCliente] = useState([]);
+  const [inputValue, setInputValue] = useState();
+  const [tipo, setTipo] = useState([]);
+  const defaultValues = {
+    chruc: null,
+    chnombrecomercial: null,
+    chrazonsocial: null,
+    chcorreo: "",
+    chtelefono: "",
+    chnombres: "",
+    chdireccion: "",
+    p_inidubigeo: "",
+    p_inidpais: "",
+    p_inidtipodocumento: "",
+    chnrodocumento: "",
+    chapellidopaterno: "",
+    chapellidomaterno: "",
+    chfechanacimiento: "",
+    p_inidtiposexo: "",
+    p_inidcliente: 0,
+    p_inidtipocliente: "",
+    p_inidjurinat: value === 0 ? 1 : 2,
+    p_inidpersona: 0,
+    p_inidempresa: null,
+    proceso: value === 0 ? "PERSONA" : "EMPRESA",
+  }
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     reset,
+    setValue: setFormValue
   } = useForm({
-    defaultValues: {
-      chruc: null,
-      chnombrecomercial: null,
-      chrazonsocial: null,
-      chcorreo: "",
-      chtelefono: "",
-      chnombres: "",
-      chdireccion: "",
-      p_inidubigeo: "",
-      p_inidpais: "",
-      p_inidtipodocumento: "",
-      chnrodocumento: "",
-      chapellidopaterno: "",
-      chapellidomaterno: "",
-      chfechanacimiento: "",
-      p_inidtiposexo: "",
-      p_inidcliente: 0,
-      p_inidtipocliente: "",
-      p_inidjurinat: value === 0 ? 1 : 2,
-      p_inidpersona: 0,
-      p_inidempresa: null,
-      proceso: value === 0 ? "PERSONA" : "EMPRESA",
-    },
+    defaultValues,
   });
 
   const handleChange = (event, newValue) => {
@@ -119,9 +129,25 @@ export default function ModalClient({ open, setOpen, title }) {
   };
 
   const handleClose = () => {
-    reset();
+    reset(defaultValues);
     setOpen(false);
   };
+
+  useEffect(() => {
+    client && reset(client);
+  }, [client, reset]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const persona = await commonServices({ letterAccion: 15 });
+      const pais = await commonServices({ letterAccion: 17 });
+      const type = await commonServices({ letterAccion: 12 });
+      setCliente(persona);
+      setPaises(pais);
+      setTipo(type);
+    };
+    fetchData();
+  }, []);
 
   return (
     <ModalBasic
@@ -168,6 +194,7 @@ export default function ModalClient({ open, setOpen, title }) {
             errors={errors}
             CustomInput={CustomInput}
             CustomSelect={CustomSelect}
+            cliente={cliente}
           />
         </CustomTabPanel>
         <CustomTabPanel value={value} index={1}>
@@ -191,8 +218,11 @@ export default function ModalClient({ open, setOpen, title }) {
             </div>
             <div className='flex mt-3 gap-3 flex-col md:flex-row'>
               <CustomSelect label='Tipo Cliente' textKey='p_inidtipocliente'>
-                <MenuItem value='42'>Persona</MenuItem>
-                <MenuItem value='E'>Empresa</MenuItem>
+                {
+                  tipo.map(item => (
+                    <MenuItem key={item.p_inidmaestrodetalle} value={item.p_inidmaestrodetalle}>{item.chmaestrodetalle}</MenuItem>
+                  ))
+                }
               </CustomSelect>
               <div className='w-full hidden md:block'></div>
             </div>
@@ -212,19 +242,44 @@ export default function ModalClient({ open, setOpen, title }) {
               <RoomIcon color='primary' /> Datos de dirección
             </legend>
             <CustomInput label='Direccion' textKey='chdireccion' />
-            <CustomSelect
-              label='Ubigeo'
-              textKey='p_inidubigeo'
-              handleChange={() => {}}
-            >
-              <MenuItem value={1}>jij</MenuItem>
-            </CustomSelect>
+            <Autocomplete
+              freeSolo
+              id='free-solo-2-demo'
+              disableClearable
+              value={inputValue}
+              onChange={(event, newValue) => {
+                setInputValue(newValue);
+                setFormValue('p_inidubigeo', newValue.p_inidubigeo);
+              }}
+              options={ubigeo}
+              getOptionLabel={(option) => option.chdepartamento + ' - ' + option.chprovincia + ' - ' + option.chdistrito}
+              size="small"
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label='Ubigeo'
+                  InputProps={{
+                    ...params.InputProps,
+                    type: "search",
+                  }}
+                  error={errors.p_inidubigeo}
+                  InputLabelProps={{error: errors.p_inidubigeo}}
+                />
+              )}
+            />
             <CustomSelect
               label='Pais'
               textKey='p_inidpais'
               handleChange={() => {}}
             >
-              <MenuItem value='283'>jij</MenuItem>
+              {paises.map((item) => (
+                <MenuItem
+                  key={item.p_inidmaestrodetalle}
+                  value={item.p_inidmaestrodetalle}
+                >
+                  {item.chmaestrodetalle}
+                </MenuItem>
+              ))}
             </CustomSelect>
           </fieldset>
         </Box>
