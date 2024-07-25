@@ -32,13 +32,8 @@ export const { signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       session.user = token;
-      // session.expires = token.exp;
       return session;
     },
-    // async signIn({ user, account, profile, email, credentials }) {
-    //   console.log("🚀 ~ signIn ~ user, account, profile, email, credentials:", user, account, profile, email, credentials)
-    //   return true;
-    // },
   },
   session: {
     strategy: "jwt",

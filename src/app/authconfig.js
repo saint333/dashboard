@@ -4,8 +4,7 @@ export const authConfig = {
     signIn: "/login",
   },
   callbacks: {
-    async authorized({ auth, request }) {
-      console.log("🚀 ~ authorized ~ currentUser:", request.cookies.get("sessionToken"))
+    async authorized({ request }) {
       const isLoggedIn = request.cookies.get("sessionToken");
       const isOnDashboard = request.nextUrl.pathname.startsWith("/dashboard");
       if (isOnDashboard) {
