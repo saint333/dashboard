@@ -3,6 +3,7 @@ import { auth } from "@/app/auth";
 
 export const commonServices = async ({ letterAccion }) => {
   const session = await auth();
+  console.log("🚀 ~ commonServices ~ session:", session)
   const response = await fetch(
     process.env.NEXT_PUBLIC_API_URL + "/maintenance/master/detail?master=" + letterAccion,
     {

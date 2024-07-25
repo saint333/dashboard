@@ -1,6 +1,20 @@
 "use serve";
 import { auth } from "@/app/auth";
-import { revalidateTag } from "next/cache";
+
+export const SupplierList = async () => {
+  const session = await auth();
+  console.log("🚀 ~ SupplierList ~ session:", session)
+  const response = await fetch(process.env.URL_API + "/maintenance/provider", {
+    method: "GET",
+    headers: {
+      Authorization: `JWT ${session.user.token_acceso}`,
+    },
+    next: {
+      tags: ["supplier"],
+    },
+  });
+  return response.json();
+};
 
 export const SupplierServices = async ({ data, letterAccion }) => {
   const session = await auth();
@@ -22,7 +36,3 @@ export const SupplierServices = async ({ data, letterAccion }) => {
   );
   return response.json();
 };
-
-export const actionSupplier = () => {
-  revalidateTag("supplier");
-}

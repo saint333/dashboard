@@ -22,7 +22,7 @@ import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
 import { commonServices } from "@/services";
 import { ubigeo } from "@/util/ubigeo";
-import { actionSupplier, SupplierServices } from "@/services/maintenance/suppliers";
+import { SupplierServices } from "@/services/maintenance/suppliers";
 
 export default function ModalSuppliers({ open, setOpen, title }) {
   const [value, setValue] = useState(0);
@@ -70,7 +70,6 @@ export default function ModalSuppliers({ open, setOpen, title }) {
     const letterAccion = "I";
     const response = await SupplierServices({ data, letterAccion });
     handleClose();
-    actionSupplier();
   };
 
   const CustomInput = ({ label, textKey }) => (
