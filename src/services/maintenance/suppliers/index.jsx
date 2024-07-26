@@ -3,8 +3,7 @@ import { auth } from "@/app/auth";
 
 export const SupplierList = async () => {
   const session = await auth();
-  console.log("🚀 ~ SupplierList ~ session:", session)
-  const response = await fetch(process.env.URL_API + "/maintenance/provider", {
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/provider", {
     method: "GET",
     headers: {
       Authorization: `JWT ${session.user.token_acceso}`,
@@ -36,3 +35,19 @@ export const SupplierServices = async ({ data, letterAccion }) => {
   );
   return response.json();
 };
+
+export const DetailSupplierServices = async ({client, legal}) => {
+  const session = await auth();
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + `/maintenance/provider/detail?p_inidproveedor=${client}&p_inidjurinat=${legal}`,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  return response.json();
+}

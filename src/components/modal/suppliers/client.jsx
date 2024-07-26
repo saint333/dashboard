@@ -22,13 +22,36 @@ import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
 import { commonServices } from "@/services";
 import { ubigeo } from "@/util/ubigeo";
-import { SupplierServices } from "@/services/maintenance/suppliers";
+import { prueba } from "@/app/dashboard/maintenance/suppliers/page";
 
-export default function ModalSuppliers({ open, setOpen, title }) {
+export default function ModalSuppliers({ open, setOpen, title, setData , client }) {
   const [value, setValue] = useState(0);
   const [paises, setPaises] = useState([]);
   const [cliente, setCliente] = useState([]);
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState('');
+  const defaultValues = {
+    chruc: "",
+    chnombrecomercial: "",
+    chrazonsocial: "",
+    chcorreo: "",
+    chtelefono: "",
+    chnombres: "",
+    chdireccion: "",
+    p_inidubigeo: "",
+    p_inidpais: "",
+    p_inidtipodocumento: "",
+    chnrodocumento: "",
+    chapellidopaterno: "",
+    chapellidomaterno: "",
+    chfechanacimiento: "",
+    p_inidtiposexo: "",
+    proceso: value === 0 ? "PERSONA" : "EMPRESA",
+    p_inidempresa: null,
+    p_inidpersona: 0,
+    p_inidjurinat: value === 0 ? 1 : 2,
+    p_inidproveedor: 0,
+  }
+
   const {
     register,
     handleSubmit,
@@ -37,28 +60,7 @@ export default function ModalSuppliers({ open, setOpen, title }) {
     reset,
     setValue: setFormValue,
   } = useForm({
-    defaultValues: {
-      chruc: "",
-      chnombrecomercial: "",
-      chrazonsocial: "",
-      chcorreo: "",
-      chtelefono: "",
-      chnombres: "",
-      chdireccion: "",
-      p_inidubigeo: "",
-      p_inidpais: "",
-      p_inidtipodocumento: "",
-      chnrodocumento: "",
-      chapellidopaterno: "",
-      chapellidomaterno: "",
-      chfechanacimiento: "",
-      p_inidtiposexo: "",
-      proceso: value === 0 ? "PERSONA" : "EMPRESA",
-      p_inidempresa: null,
-      p_inidpersona: 0,
-      p_inidjurinat: value === 0 ? 1 : 2,
-      p_inidproveedor: 0,
-    },
+    defaultValues
   });
 
   const handleChange = (event, newValue) => {
@@ -67,8 +69,10 @@ export default function ModalSuppliers({ open, setOpen, title }) {
   };
 
   const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data)
     const letterAccion = "I";
-    const response = await SupplierServices({ data, letterAccion });
+    const list = await prueba(data, letterAccion);
+    setData(list);
     handleClose();
   };
 
@@ -120,9 +124,9 @@ export default function ModalSuppliers({ open, setOpen, title }) {
   };
 
   const handleClose = () => {
-    reset();
+    reset(defaultValues);
     setOpen(false);
-    setInputValue();
+    setInputValue(null);
   };
 
   useEffect(() => {
@@ -134,6 +138,11 @@ export default function ModalSuppliers({ open, setOpen, title }) {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    client && setInputValue(client.p_inidubigeo);
+    client && reset(client);
+  }, [client, reset]);
 
   return (
     <ModalBasic
@@ -222,9 +231,9 @@ export default function ModalSuppliers({ open, setOpen, title }) {
               freeSolo
               id='free-solo-2-demo'
               disableClearable
-              value={inputValue}
+              value={ubigeo.find((option) => option.p_inidubigeo === inputValue) || null}
               onChange={(event, newValue) => {
-                setInputValue(newValue);
+                setInputValue(newValue.p_inidubigeo);
                 setFormValue('p_inidubigeo', newValue.p_inidubigeo);
               }}
               options={ubigeo}

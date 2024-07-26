@@ -26,7 +26,6 @@ export const { signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ user, token }) {
-      console.log("🚀 ~ jwt ~ session:", token)
       const userToken = { ...user, ...token, exp:  new Date(now.getTime() + 2 * 60000).getTime()};
       return userToken;
     },
@@ -37,10 +36,10 @@ export const { signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 2 * 60, // 2 minutes
+    maxAge: 30 * 60, // 2 minutes
   },
   jwt: {
-    maxAge: 2 * 60, // 2 minutes
+    maxAge: 30 * 60, // 2 minutes
   },
   cookies: {
     sessionToken: {
