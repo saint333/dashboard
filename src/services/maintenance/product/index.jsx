@@ -59,7 +59,7 @@ export const fetchDataProduct = async (padre, hijo) => {
   return response.json();
 };
 
-export const NewFamily = async (data) => {
+export const NewFamily = async (data, letterAccion) => {
   const session = await auth();
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/maintenance/family`,
@@ -71,12 +71,12 @@ export const NewFamily = async (data) => {
         Authorization: `JWT ${session.user.token_acceso}`,
       },
       body: JSON.stringify({
-        p_inidfamiliadetalle: 0,
-        p_iniddominio: 1,
-        p_inidfamiliacabecera: 5,
-        p_inidfamiliacabecera2: 0,
-        chfamiliadetalle: "CALIBRE 88",
-        accion: "I",
+        p_inidfamiliadetalle: letterAccion == "I" ? 0: data.p_inidfamiliadetalle,
+        p_inidfamiliacabecera: letterAccion == "D" ? 0 : data.p_inidfamiliacabecera,
+        p_inidfamiliacabecera2: letterAccion == "D" ? 0 : data.p_inidfamiliacabecera2,
+        chfamiliadetalle: data.chfamiliadetalle,
+        p_iniddominio: session.user.p_iniddominio_default,
+        accion: letterAccion,
       }),
     }
   );

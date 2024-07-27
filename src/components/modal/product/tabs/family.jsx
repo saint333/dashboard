@@ -5,9 +5,12 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
   Card,
   CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
   FormControl,
   IconButton,
   InputLabel,
@@ -19,14 +22,30 @@ import {
   Typography,
 } from "@mui/material";
 import { Add, Delete, ExpandMore } from "@mui/icons-material";
+import { NewFamily } from "@/services/maintenance/product";
+import { CancelButton, SaveButton } from "@/components/button/button";
 
 const AddNewValue = ({
   setValue,
   setFormValue,
   setValueSelect,
   valueSelect,
+  headOne,
+  headTwo,
 }) => {
   const [valueNew, setValueNew] = useState("");
+
+  const handleAdd = async () => {
+    if (valueNew == "" || headTwo == "") return;
+    const data = {
+      p_inidfamiliacabecera: headOne,
+      p_inidfamiliacabecera2: headTwo,
+      chfamiliadetalle: valueNew,
+    };
+    const response = await NewFamily(data, "I");
+    setValueNew("");
+    console.log("🚀 ~ handleAdd ~ response:", response);
+  };
   return (
     <FormControl fullWidth className='!flex-row gap-1 !mb-3'>
       <TextField
@@ -37,12 +56,62 @@ const AddNewValue = ({
         onChange={(e) => setValueNew(e.target.value)}
         fullWidth
       />
-      <Button variant='contained' color="success" endIcon={<Add />}>
-        Send
-      </Button>
+      <IconButton color='success' onClick={handleAdd}>
+        <Add />
+      </IconButton>
     </FormControl>
   );
 };
+
+function ButtonAler({item}) {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = (item) => async () => {
+    const data = {
+      p_inidfamiliadetalle: item.p_inidfamiliadetalle,
+      p_inidfamiliacabecera: 0,
+      p_inidfamiliacabecera2: 0,
+      chfamiliadetalle: "",
+    };
+    const response = await NewFamily(data, "D");
+    setOpen(false);
+  }
+
+  return (
+    <>
+      <IconButton onClick={handleClickOpen}>
+        <Delete color='error' />
+      </IconButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title-3'
+        aria-describedby='alert-dialog-description-3'
+      >
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description-3'>
+            ¿Está seguro de eliminar este registro?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <CancelButton
+            text='Cancelar'
+            onClick={handleClose}
+          />
+          <SaveButton text='Aceptar' onClick={handleDelete(item)} />
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
 
 export default function Family({
   errors,
@@ -50,6 +119,7 @@ export default function Family({
   control,
   setFormValue,
   caliber,
+  getValues,
 }) {
   const [valueSelect, setValueSelect] = useState({
     ...arrayData,
@@ -143,6 +213,7 @@ export default function Family({
           <Typography variant='subtitle1'>TIPO</Typography>
           <Card>
             <CardContent>
+              <AddNewValue headOne={2} headTwo={getValues("category")} />
               <CustomGruopRadio
                 textKey='type'
                 label='Tipo'
@@ -160,9 +231,7 @@ export default function Family({
                       <Radio value={item.p_inidfamiliadetalle} />
                       <Typography>{item.chfamiliadetalle}</Typography>
                     </div>
-                    <IconButton>
-                      <Delete color='error' />
-                    </IconButton>
+                    <ButtonAler item={item}/>
                   </FormControl>
                 ))}
               </CustomGruopRadio>
@@ -185,7 +254,7 @@ export default function Family({
               <Typography>MARCAS</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <AddNewValue />
+              <AddNewValue headOne={3} headTwo={getValues("type")} />
               <CustomGruopRadio
                 textKey='brand'
                 label='Marca'
@@ -201,9 +270,7 @@ export default function Family({
                       <Radio value={item.p_inidfamiliadetalle} />
                       <Typography>{item.chfamiliadetalle}</Typography>
                     </div>
-                    <IconButton>
-                      <Delete color='error' />
-                    </IconButton>
+                    <ButtonAler item={item}/>
                   </FormControl>
                 ))}
               </CustomGruopRadio>
@@ -221,7 +288,7 @@ export default function Family({
               <Typography>MODELOS</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <AddNewValue />
+              <AddNewValue headOne={4} headTwo={getValues("type")} />
               <CustomGruopRadio
                 textKey='model'
                 label='Modelo'
@@ -239,9 +306,7 @@ export default function Family({
                       <Radio value={item.p_inidfamiliadetalle} />
                       <Typography>{item.chfamiliadetalle}</Typography>
                     </div>
-                    <IconButton>
-                      <Delete color='error' />
-                    </IconButton>
+                    <ButtonAler item={item}/>
                   </FormControl>
                 ))}
               </CustomGruopRadio>
@@ -258,7 +323,7 @@ export default function Family({
                     <Typography>ACABADO</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <AddNewValue />
+                    <AddNewValue headOne={6} headTwo={getValues("model")} />
                     <CustomGruopRadio
                       textKey='finish'
                       label='Acabado'
@@ -274,9 +339,7 @@ export default function Family({
                             <Radio value={item.p_inidfamiliadetalle} />
                             <Typography>{item.chfamiliadetalle}</Typography>
                           </div>
-                          <IconButton>
-                            <Delete color='error' />
-                          </IconButton>
+                          <ButtonAler item={item}/>
                         </FormControl>
                       ))}
                     </CustomGruopRadio>
@@ -294,7 +357,7 @@ export default function Family({
                     <Typography>CAPACIDAD</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    <AddNewValue />
+                    <AddNewValue headOne={7} headTwo={getValues("model")} />
                     <CustomGruopRadio
                       textKey='capacity'
                       label='Capacidad'
@@ -310,9 +373,7 @@ export default function Family({
                             <Radio value={item.p_inidfamiliadetalle} />
                             <Typography>{item.chfamiliadetalle}</Typography>
                           </div>
-                          <IconButton>
-                            <Delete color='error' />
-                          </IconButton>
+                          <ButtonAler item={item}/>
                         </FormControl>
                       ))}
                     </CustomGruopRadio>
@@ -333,7 +394,7 @@ export default function Family({
               <Typography>CALIBRE</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <AddNewValue />
+              <AddNewValue headOne={5} headTwo={0} />
               <CustomGruopRadio
                 textKey='caliber'
                 label='Calibre'
@@ -349,9 +410,7 @@ export default function Family({
                       <Radio value={item.p_inidfamiliadetalle} />
                       <Typography>{item.chfamiliadetalle}</Typography>
                     </div>
-                    <IconButton>
-                      <Delete color='error' />
-                    </IconButton>
+                    <ButtonAler item={item}/>
                   </FormControl>
                 ))}
               </CustomGruopRadio>

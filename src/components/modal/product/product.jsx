@@ -21,6 +21,7 @@ export default function ModalProduct({ open, setOpen, title }) {
     control,
     reset,
     setValue: setFormValue,
+    getValues
   } = useForm({
     defaultValues: {
       category: "",
@@ -129,6 +130,7 @@ export default function ModalProduct({ open, setOpen, title }) {
             control={control}
             setFormValue={setFormValue}
             caliber={caliber}
+            getValues={getValues}
           />
         </CustomTabPanel>
       </Box>
