@@ -15,6 +15,9 @@ export const { signIn, signOut, auth } = NextAuth({
       authorize: async (credentials) => {
         try {
           const user = await login(credentials);
+          if (user.codigo === -1) {
+            throw new Error("CredentialsSignin");
+          }
           return { email: credentials.username, ...user };
         } catch (error) {
           console.log("🚀 ~ authorize ~ error:", error);

@@ -58,3 +58,27 @@ export const fetchDataProduct = async (padre, hijo) => {
   );
   return response.json();
 };
+
+export const NewFamily = async (data) => {
+  const session = await auth();
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/maintenance/family`,
+    {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+      body: JSON.stringify({
+        p_inidfamiliadetalle: 0,
+        p_iniddominio: 1,
+        p_inidfamiliacabecera: 5,
+        p_inidfamiliacabecera2: 0,
+        chfamiliadetalle: "CALIBRE 88",
+        accion: "I",
+      }),
+    }
+  );
+  return response.json();
+};

@@ -10,13 +10,10 @@ export const login = async (credentials) => {
         "Content-Type": "application/json",
       },
     });
-    if (!response.ok) {
-      return "Error en las credenciales con api";
-    }
     const user = await response.json();
     return user;
   } catch (error) {
-    console.log("🚀 ~ login ~ error:", error);
-    return "Error en las credenciales";
+    console.log("🚀 ~ login ~ error:", error)
+    return {codigo: -1, message:"Error en las credenciales"};
   }
 };
