@@ -1,4 +1,4 @@
-import { signIn } from "../auth";
+import { auth, signIn } from "../auth";
 
 export const authenticate = async (prevState, formData) => {
   try {
@@ -9,4 +9,10 @@ export const authenticate = async (prevState, formData) => {
     console.log("🚀 ~ authenticate ~ err:", err.message)
     return "Usuario o contraseña incorrectos";
   }
+};
+
+export const session = async () => {
+  const session = await auth();
+  console.log("🚀 ~ session ~ session:", session)
+  return session;
 };

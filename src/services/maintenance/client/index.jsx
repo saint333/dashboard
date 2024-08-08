@@ -100,3 +100,63 @@ export const DetailClientServices = async ({client, legal}) => {
   );
   return response.json();
 }
+
+export const CardList = async () => {
+  const session = await auth();
+  const responde = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/card",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  const lists = await responde.json();
+  return lists
+};
+
+export const List = async () => {
+  const session = await auth();
+  const responde = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/client",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  const lists = await responde.json();
+  return lists
+};
+
+export const LicenseList = async () => {
+  const session = await auth();
+  const responde = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/license",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  const lists = await responde.json();
+  return lists
+};
+
+export const ResolutionList = async () => {
+  const session = await auth();
+  const responde = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/client/resolution",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  const lists = await responde.json();
+  return lists
+};

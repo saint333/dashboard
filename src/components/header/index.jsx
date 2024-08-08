@@ -44,17 +44,13 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function Header({domain}) {
+export default function Header({session}) {
   const [{ collapsed }, dispatch] = useMenuProvider();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
-
-  if (domain?.lists?.error === 'Invalid token') {
-    return router.push('/login')
-  }
 
   return (
     <AppBar position='fixed' open={collapsed}>
@@ -84,15 +80,17 @@ export default function Header({domain}) {
           <MoreVertIcon />
         </IconButton>
         <div className='hidden md:block'>
-          <MenuOptions domain={domain}/>
+          <MenuOptions session={session} />
         </div>
       </Toolbar>
-        {open && <div className="md:hidden">
-          <Divider/>
-          <div className="p-4">
-            <MenuOptions domain={domain}/>
+      {open && (
+        <div className='md:hidden'>
+          <Divider />
+          <div className='p-4'>
+            <MenuOptions session={session} />
           </div>
-        </div>}
+        </div>
+      )}
     </AppBar>
   );
 }

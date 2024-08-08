@@ -7,7 +7,7 @@ import DataTableTopToolbar from "./DataTableTopToolbar";
 import { useState } from "react";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 
-function Table({ columns = [], data = [], ...rest }) {
+function Table({ columns = [], data = [], acciones, loading, ...rest }) {
   const [states, setStates] = useState({
     enableGrouping: true,
     enableColumnPinning: true,
@@ -120,11 +120,14 @@ function Table({ columns = [], data = [], ...rest }) {
         pageSize: 10,
       },
     },
+    renderTopToolbarCustomActions: (_props) => {
+      return acciones
+    },
     ...states,
-    // state:{
-    //   isLoading: true,
-    //   showLoadingOverlay: false
-    // },
+    state:{
+      isLoading: loading,
+      showLoadingOverlay: false
+    },
     ...rest,
   });
 

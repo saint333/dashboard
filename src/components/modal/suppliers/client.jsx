@@ -22,7 +22,7 @@ import CustomTabPanel, { a11yProps } from "@/components/tabs/tabs";
 import { CancelButton, SaveButton } from "@/components/button/button";
 import { commonServices } from "@/services";
 import { ubigeo } from "@/util/ubigeo";
-import { prueba } from "@/app/dashboard/maintenance/suppliers/page";
+import { SupplierServices } from "@/services/maintenance/suppliers";
 
 export default function ModalSuppliers({ open, setOpen, title, setData , client }) {
   const [value, setValue] = useState(0);
@@ -71,8 +71,8 @@ export default function ModalSuppliers({ open, setOpen, title, setData , client 
   const onSubmit = async (data) => {
     console.log("🚀 ~ onSubmit ~ data:", data)
     const letterAccion = "I";
-    const list = await prueba(data, letterAccion);
-    setData(list);
+    const list = await SupplierServices({ data, letterAccion });
+    setData(prev => [...prev, data]);
     handleClose();
   };
 

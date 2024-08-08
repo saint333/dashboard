@@ -6,8 +6,9 @@ import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalResolution from "@/components/modal/resolution/resolution";
+import { ResolutionList } from "@/services/maintenance/client";
 
-export default function ResolutionCard({product}) {
+export default function ResolutionCard() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -22,8 +23,12 @@ export default function ResolutionCard({product}) {
   };
 
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await ResolutionList();
+      setData(product);
+    };
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -92,12 +97,12 @@ export default function ResolutionCard({product}) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Resolución' className='w-fit' onClick={() => setOpenModal(true)} />
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        acciones={<AgregarButton text='Nueva Resolución' className='w-fit' onClick={() => setOpenModal(true)} />}
+        loading={data.length === 0}
       />
       <ModalResolution open={openModal} setOpen={setOpenModal} title="Mantenimiento de Resolución" />
     </div>

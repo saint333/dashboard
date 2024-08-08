@@ -67,7 +67,7 @@ function DataTableTopToolbar({ table }) {
 						<MRT_GlobalFilterTextField {...globalFilterProps} />
 					)}
 
-					<div className="flex flex-1">{renderTopToolbarCustomActions?.({ table }) ?? null}</div>
+					<div className="flex flex-1 pl-3">{renderTopToolbarCustomActions?.({ table }) ?? null}</div>
 
 					{enableToolbarInternalActions ? (
 						<Box className="flex items-center space-x-8">

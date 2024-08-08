@@ -82,3 +82,18 @@ export const NewFamily = async (data, letterAccion) => {
   );
   return response.json();
 };
+
+export const productList = async () => {
+  const session = await auth();
+  const responde = await fetch(process.env.NEXT_PUBLIC_API_URL + "/maintenance/product",
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Authorization: `JWT ${session.user.token_acceso}`,
+      },
+    }
+  );
+  const lists = await responde.json();
+  return lists
+};

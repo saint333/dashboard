@@ -6,8 +6,9 @@ import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalLicense from "@/components/modal/license/license";
+import { LicenseList } from "@/services/maintenance/client";
 
-export default function License({ product }) {
+export default function License() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -22,8 +23,12 @@ export default function License({ product }) {
   };
 
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await LicenseList();
+      setData(product);
+    }
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -117,12 +122,12 @@ export default function License({ product }) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Licencia' className='w-fit' onClick={() => setOpenModal(true)}/>
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        acciones={<AgregarButton text='Nueva Licencia' className='w-fit' onClick={() => setOpenModal(true)}/>}
+        loading={data.length === 0}
       />
       <ModalLicense open={openModal} setOpen={setOpenModal} title='Mantenimiento de Licencia' />
     </div>

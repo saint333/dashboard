@@ -84,12 +84,15 @@ const MenuItems = ({ menu = [], collapsed }) => {
             if (!matches) {
               dispatch({ type: menuCase.COLLAPSED })
             }
-          }}>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          }}
+          sx={{padding : 0}}
+          >
+          <ListItem disablePadding sx={{ display: "block", padding: 0 }}>
             <ListItemButton
               sx={{
                 minHeight: 48,
                 justifyContent: collapsed ? "initial" : "center",
+                padding: 0
               }}
             >
               <ListItemIcon
@@ -128,12 +131,13 @@ const MenuItems = ({ menu = [], collapsed }) => {
     }
     if (item.type === "collapse") {
       return (
-        <List key={item.id}>
-          <ListItem disablePadding sx={{ display: "block" }}>
+        <List key={item.id} sx={{padding : 0}}>
+          <ListItem disablePadding sx={{ display: "block", padding: 0 }}>
             <ListItemButton
               sx={{
                 minHeight: 48,
                 justifyContent: collapsed ? "initial" : "center",
+                padding: 0
               }}
               onClick={() => handleClick(item.id)}
             >
@@ -171,11 +175,12 @@ const MenuItems = ({ menu = [], collapsed }) => {
     }
     if (item.type === "subitem") {
       return (
-        <List disablePadding key={item.id}>
-          <ListItem disablePadding sx={{ display: "block" }}>
+        <List disablePadding key={item.id} sx={{padding : 0}}>
+          <ListItem disablePadding sx={{ display: "block", padding: 0 }}>
             <ListItemButton
               sx={{ minHeight: 48 }}
               onClick={() => router.push(item.url)}
+              padding={0}
             >
               <ListItemIcon>
                 <Icon color='primary'>{item.icon}</Icon>
@@ -193,14 +198,15 @@ const MenuItems = ({ menu = [], collapsed }) => {
 };
 
 function Navbar() {
+  const [open, setOpen] = useState(false);
   const [{ collapsed }] = useMenuProvider();
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Drawer variant='permanent' open={collapsed} hideBackdrop='true'>
+      <Drawer variant='permanent' open={open || collapsed} hideBackdrop='true'>
         <DrawerHeader>
-          {!collapsed ? (
+          {!collapsed && !open ? (
             <Image
               src='/icons/icon-lina-dark.png'
               alt='logo'
@@ -221,8 +227,8 @@ function Navbar() {
           )}
         </DrawerHeader>
         <Divider />
-        <div className='overflow-y-auto overflow-x-hidden menu'>
-          <MenuItems menu={menu} collapsed={collapsed} />
+        <div className='overflow-y-auto overflow-x-hidden menu' onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+          <MenuItems menu={menu} collapsed={open || collapsed} />
         </div>
       </Drawer>
     </Box>

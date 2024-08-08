@@ -1,38 +1,27 @@
-"use client";
 import { CiGlobe } from "react-icons/ci";
-import { BiExitFullscreen, BiMoon, BiSun } from "react-icons/bi";
+import { BiExitFullscreen } from "react-icons/bi";
 import {
   Avatar,
   Divider,
-  FormControl,
   IconButton,
-  InputLabel,
   ListItemIcon,
   Menu,
   MenuItem,
-  Select,
   Typography,
-  useTheme,
 } from "@mui/material";
-import { useGlobalProvider } from "@/context/global/GlobalContext";
-import { globalCase } from "@/context/common/GlobalConstants";
 import { useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import { useFullScreen } from "@/context/screen/ScreenContext";
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import { signOut } from "@/app/auth";
+import DomainComponent from "./domain";
+import SucursalComponent from "./sucursal";
+import Theme from "./theme";
 
-export default function MenuOptions({domain}) {
-  const theme = useTheme();
-  const [{}, dispatch] = useGlobalProvider();
+export default function MenuOptions({ session }) {
   const { isFullScreen, enterFullScreen, exitFullScreen } = useFullScreen();
   const [anchorEl, setAnchorEl] = useState(null);
   const user = Boolean(anchorEl);
-  const [age, setAge] = useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
 
   const handleClickUser = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,56 +31,15 @@ export default function MenuOptions({domain}) {
     setAnchorEl(null);
   };
 
-  const handleTheme = (theme) => {
-    console.log("🚀 ~ handleTheme ~ theme:", theme)
-    dispatch({ type: globalCase.THEME, theme });
-    localStorage.setItem("theme", theme);
-  };
-
   return (
     <div className='flex items-center justify-evenly gap-4 flex-row flex-wrap md:flex-nowrap transition-all duration-75'>
-      <IconButton className="order-3 md:order-none">
+      <IconButton className='order-3 md:order-none'>
         <CiGlobe className='text-2xl' />
       </IconButton>
-      <FormControl sx={{ minWidth: 80 }} size="small" className="order-1 w-full md:order-none">
-        <InputLabel sx={{ color: 'text.primary' }}>Dominios</InputLabel>
-        <Select
-          value={domain.p_iniddominio_default}
-          onChange={(e) => console.log("🚀 ~ e:", e)}
-          autoWidth
-          label="Dominios"
-        >
-          {domain && domain.lists.map((item, index) => (
-            <MenuItem key={index} value={item.p_iniddominio}>{item.chnombrecomercial}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl sx={{ minWidth: 80 }} size="small" className="order-2 w-full md:order-none">
-        <InputLabel sx={{ color: 'text.primary' }}>Sucursales</InputLabel>
-        <Select
-          value={age}
-          onChange={handleChange}
-          autoWidth
-          label="Sucursales"
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Twenty</MenuItem>
-          <MenuItem value={21}>Twenty one</MenuItem>
-          <MenuItem value={22}>Twenty one and a half</MenuItem>
-        </Select>
-      </FormControl>
-      {theme.palette.mode === "dark" ? (
-        <IconButton onClick={() => handleTheme("light")} className="order-4 md:order-none">
-          <BiSun className='text-2xl' />
-        </IconButton>
-      ) : (
-        <IconButton onClick={() => handleTheme("dark")} className="order-4 md:order-none">
-          <BiMoon className='text-2xl' />
-        </IconButton>
-      )}
-      <IconButton className="order-5 md:order-none">
+      <DomainComponent session={session} />
+      <SucursalComponent session={session} />
+      <Theme />
+      <IconButton className='order-5 md:order-none'>
         {isFullScreen ? (
           <BiExitFullscreen
             className='text-2xl'
@@ -110,7 +58,7 @@ export default function MenuOptions({domain}) {
         aria-controls={user ? "account-menu" : undefined}
         aria-haspopup='true'
         aria-expanded={user ? "true" : undefined}
-        className="order-6 md:order-none"
+        className='order-6 md:order-none'
       >
         <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
       </IconButton>
@@ -171,11 +119,12 @@ export default function MenuOptions({domain}) {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={() => {
-          handleCloseUser()
-          signOut()
-        }
-        }>
+        <MenuItem
+          onClick={() => {
+            handleCloseUser();
+            signOut();
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>

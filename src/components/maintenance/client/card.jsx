@@ -6,8 +6,9 @@ import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalCard from "@/components/modal/card";
+import { CardList } from "@/services/maintenance/client";
 
-export default function CardLicense({product}) {
+export default function CardLicense() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -20,10 +21,14 @@ export default function CardLicense({product}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await CardList();
+      setData(product);
+    }
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -117,12 +122,12 @@ export default function CardLicense({product}) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Tarjeta' className='w-fit' onClick={() => setOpenModal(true)} />
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        acciones={<AgregarButton text='Nueva Tarjeta' className='w-fit' onClick={() => setOpenModal(true)} />}
+        loading={data.length === 0}
       />
       <ModalCard open={openModal} setOpen={setOpenModal} title='Mantenimiento de Tarjeta' />
     </div>

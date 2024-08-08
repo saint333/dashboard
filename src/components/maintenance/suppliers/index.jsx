@@ -2,18 +2,19 @@
 import { useEffect, useMemo, useState } from "react";
 import Table from "../../table";
 import { AgregarButton } from "../../button/button";
-import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalSuppliers from "@/components/modal/suppliers/client";
-import { DetailSupplierServices } from "@/services/maintenance/suppliers";
+import { DetailSupplierServices, SupplierList } from "@/services/maintenance/suppliers";
 
-export default function Supplier({product}) {
+export default function Supplier() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const open = Boolean(anchorEl);
   const [client, setClient] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,8 +25,13 @@ export default function Supplier({product}) {
   };
 
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await SupplierList();
+      setData(product);
+      setLoading(false);
+    };
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -52,7 +58,7 @@ export default function Supplier({product}) {
       {
         accessorKey: "chdireccion",
         header: "DIRECCIÓN",
-        size: 150,
+        size: 500,
       },
       {
         accessorKey: "chtelefono",
@@ -106,14 +112,14 @@ export default function Supplier({product}) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nueva Tarjeta' className='w-fit' onClick={() => setOpenModal(true)} />
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        acciones={<AgregarButton text='Nueva Tarjeta' className='w-fit' onClick={() => setOpenModal(true)} />}
+        loading={loading}
       />
-      <ModalSuppliers open={openModal} setOpen={setOpenModal} title='Mantenimiento de Proveedor' client={client} setData={setData} />
+      {openModal && <ModalSuppliers open={openModal} setOpen={setOpenModal} title='Mantenimiento de Proveedor' client={client} setData={setData} />}
     </div>
   );
 }

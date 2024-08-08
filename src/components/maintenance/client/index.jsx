@@ -6,9 +6,9 @@ import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalClient from "@/components/modal/client/client";
-import { DetailClientServices } from "@/services/maintenance/client";
+import { DetailClientServices, List } from "@/services/maintenance/client";
 
-export default function ClientList({ product }) {
+export default function ClientList() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -24,8 +24,12 @@ export default function ClientList({ product }) {
   };
 
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await List();
+      setData(product);
+    };
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -106,12 +110,12 @@ export default function ClientList({ product }) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Agregar' className='w-fit' onClick={() => setOpenModal(true)} />
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        acciones={<AgregarButton text='Agregar' className='w-fit' onClick={() => setOpenModal(true)} />}
+        loading={data.length === 0}
       />
       <ModalClient open={openModal} setOpen={setOpenModal} title="Mantenimiento de Cliente" client={client} />
     </div>

@@ -2,12 +2,13 @@
 import { useEffect, useMemo, useState } from "react";
 import Table from "../../table";
 import { AgregarButton } from "../../button/button";
-import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ModalProduct from "@/components/modal/product/product";
+import { productList } from "@/services/maintenance/product";
 
-export default function ProductsList({ product }) {
+export default function ProductsList() {
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -23,8 +24,12 @@ export default function ProductsList({ product }) {
   };
 
   useEffect(() => {
-    setData(product);
-  }, [product]);
+    const fetchData = async () => {
+      const product = await productList();
+      setData(product);
+    };
+    fetchData();
+  }, []);
 
   const columns = useMemo(
     () => [
@@ -56,7 +61,7 @@ export default function ProductsList({ product }) {
       {
         accessorKey: "chdescripcion",
         header: "DESCRIPCIÓN",
-        size: 150,
+        size: 500,
       },
       {
         accessorKey: "chsituacion",
@@ -103,12 +108,12 @@ export default function ProductsList({ product }) {
 
   return (
     <div className='grid gap-4 items-start'>
-      <AgregarButton text='Nuevo Producto' className='w-fit' onClick={() => setOpenModal(true)}/>
-      <Divider />
       <Table
         columns={columns}
         data={data}
         renderRowActions={renderRowActions}
+        loading={data.length === 0}
+        acciones={<AgregarButton text='Nuevo Producto' className='w-fit' onClick={() => setOpenModal(true)}/>}
       />
       <ModalProduct open={openModal} setOpen={setOpenModal} title='Nuevo Producto' />
     </div>
